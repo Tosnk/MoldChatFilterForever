@@ -33,3 +33,9 @@
 - Packager webhook installed; tag `v1.0.0` was packaged by CurseForge within a minute (one `NoPetrovychChatFilter/` folder, no tooling files).
 - GitHub release 1.0.0 was created by hand because the first workflow run failed on CRLF line endings; `.gitattributes` now forces LF and the check strips CR, so `v1.0.1+` will release automatically.
 - The AddOns junction was removed at the user's request; the addon will be installed from CurseForge once approved.
+
+## Rename outcome (2026-11-06, later the same day)
+
+- Renamed everywhere to NoPetrovychChatFilter: repo `Tosnk/NoPetrovychChatFilter`, folder `C:\Repos\NoPetrovychChatFilter`, CurseForge project name + slug (`/wow/addons/nopetrovychchatfilter`, same project ID 1786481 and webhook), slash commands `/npcf` and `/nopetrovych`.
+- 1.0.1 (rename) and 1.0.2 (new icon) shipped by tag; CurseForge packaged both, GitHub release workflow now runs automatically (CRLF and literal-newline bugs fixed; `workflow_dispatch` added for re-running an existing tag).
+- Old folder `C:\Repos\MoldChatFilterForever` is locked by another process and still has to be deleted by hand.
