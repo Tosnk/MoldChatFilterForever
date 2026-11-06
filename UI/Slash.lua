@@ -13,8 +13,8 @@ end
 
 local function Status()
     local db = ns.db
-    Print(("Filter %s, names %s, hidden this session: %d"):format(
-        OnOff(db.enabled), OnOff(db.blockNames), ns.hiddenCount or 0))
+    Print(("Filter %s, all Cyrillic %s, Cyrillic-named players %s, hidden this session: %d"):format(
+        OnOff(db.enabled), OnOff(db.hideAllCyrillic), OnOff(ns.BlockNamesActive()), ns.hiddenCount or 0))
     local labels = {}
     for _, src in ipairs(ns.SOURCES) do
         if db.sources[src.key] then

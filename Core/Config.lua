@@ -29,6 +29,7 @@ end
 function ns.ResetDefaults()
     local db = ns.db
     db.enabled = ns.DEFAULTS.enabled
+    db.hideAllCyrillic = ns.DEFAULTS.hideAllCyrillic
     db.blockNames = ns.DEFAULTS.blockNames
     for key, value in pairs(ns.DEFAULTS.sources) do
         db.sources[key] = value

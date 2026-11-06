@@ -48,8 +48,10 @@ channels, even when a given message of theirs happens to be in Latin letters (fo
 their Latin-letter messages are usually advertising. It is a separate switch so the player can
 keep it off if they want to see those.
 
-**Independent Test**: With "block Cyrillic-named players" on, a character named in Cyrillic posts
-"LFM SM" in LookingForGroup. The line is not shown. With the switch off, the line is shown.
+**Independent Test**: With "Filter Cyrillic-named players" on, a character named in Cyrillic posts
+"LFM SM" in LookingForGroup. The line is not shown. With both modes off, the line is shown. With
+only mode 2 on, a Latin-named player's Cyrillic line is shown while the Cyrillic-named player's
+Latin line is hidden.
 
 **Acceptance Scenarios**:
 
@@ -133,15 +135,17 @@ how many lines were hidden this session, `/mff on` or `/mff off` to flip the mas
   when it arrives from a filtered source.
 - **FR-002**: Hiding MUST remove the entire chat line: channel tag, sender name, text and any
   timestamp the client would add. No placeholder is shown.
-- **FR-003**: When the "block Cyrillic-named players" switch is on, the addon MUST hide every message
+- **FR-003**: Two filter modes MUST exist. Mode 1 "Filter all Cyrillic messages" hides any message
+  containing Cyrillic letters (FR-001). Mode 2 "Filter Cyrillic-named players" hides every message
   from a sender whose character name contains at least one Cyrillic letter, in filtered sources,
-  regardless of the message text.
+  regardless of the message text or script. While mode 1 is on, mode 2 MUST be forced on and its
+  control locked. With only mode 2 on, Cyrillic text from Latin-named players MUST stay visible.
 - **FR-004**: The addon MUST never hide messages sent by the player's own character.
 - **FR-005**: Filtering MUST be configurable per chat source with these sources: General, Trade,
   LookingForGroup, LocalDefense, Other channels (any other numbered or custom channel), Say, Yell,
   Emote, Party, Raid, Instance/Battleground, Guild/Officer, Whisper.
 - **FR-006**: Default state MUST be: General, Trade, LookingForGroup, LocalDefense and Other
-  channels ON; all remaining sources OFF; master switch ON; name switch ON.
+  channels ON; all remaining sources OFF; master switch ON; mode 1 ON; mode 2 ON.
 - **FR-007**: All settings MUST be editable from the game's Options, AddOns panel with checkboxes
   and a "Reset to defaults" control.
 - **FR-008**: Settings MUST persist per account and survive `/reload` and relog.

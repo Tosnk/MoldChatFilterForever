@@ -7,9 +7,9 @@ local registered = {}   -- { setting = <Settings object>, default = <bool> }
 local function AddCheckbox(layoutCategory, tbl, key, variable, label, tooltip, default)
     local setting = Settings.RegisterAddOnSetting(
         layoutCategory, variable, key, tbl, Settings.VarType.Boolean, label, default)
-    Settings.CreateCheckbox(layoutCategory, setting, tooltip)
+    local initializer = Settings.CreateCheckbox(layoutCategory, setting, tooltip)
     registered[#registered + 1] = { setting = setting, default = default }
-    return setting
+    return setting, initializer
 end
 
 local function Build()
@@ -28,9 +28,26 @@ local function Build()
     layout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Filter"))
     AddCheckbox(category, ns.db, "enabled", "MCFF_enabled", "Filter enabled",
         "Master switch. When off, nothing is hidden.", ns.DEFAULTS.enabled)
-    AddCheckbox(category, ns.db, "blockNames", "MCFF_blockNames", "Block Cyrillic-named players",
-        "Hide every message from a character whose name contains Cyrillic letters, even if the message itself is in Latin letters. Applies only in the sources ticked below.",
+
+    -- Mode 1: any Cyrillic text. Turning it on also turns on and locks mode 2.
+    local allSetting, allInit = AddCheckbox(category, ns.db, "hideAllCyrillic", "MCFF_hideAllCyrillic",
+        "Filter all Cyrillic messages",
+        "Hide every message that contains Cyrillic letters, whoever sends it. While this is on, Cyrillic-named players are always filtered too.",
+        ns.DEFAULTS.hideAllCyrillic)
+
+    -- Mode 2: everything from Cyrillic-named senders, whatever script they type in.
+    local namesSetting, namesInit = AddCheckbox(category, ns.db, "blockNames", "MCFF_blockNames",
+        "Filter Cyrillic-named players",
+        "Hide every message from a character whose name contains Cyrillic letters, even when the message itself is in Latin letters. With only this on, Cyrillic text from Latin-named players stays visible.",
         ns.DEFAULTS.blockNames)
+    namesInit:SetParentInitializer(allInit, function()
+        return not ns.db.hideAllCyrillic
+    end)
+    allSetting:SetValueChangedCallback(function(_, value)
+        if value and not ns.db.blockNames then
+            namesSetting:SetValue(true)
+        end
+    end)
 
     layout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Where to filter"))
     for _, src in ipairs(ns.SOURCES) do
@@ -47,7 +64,7 @@ local function Build()
                 entry.setting:SetValue(entry.default)
             end
         end,
-        "Restores the fresh-install settings: public channels filtered, group and private chat untouched.",
+        "Restores the fresh-install settings: both filter modes on, public channels filtered, group and private chat untouched.",
         true))
 
     Settings.RegisterAddOnCategory(category)

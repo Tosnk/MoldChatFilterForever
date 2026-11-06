@@ -37,8 +37,8 @@ Decision order (`ns.ShouldHide`):
 1. `db.enabled == false` → show.
 2. Sender is the player (`guid == UnitGUID("player")`, else name match) → show.
 3. `source = EventToSource(event, zoneChannelID, channelBaseName)`; `db.sources[source] ~= true` → show.
-4. `db.blockNames and NameIsCyrillic(sender)` → hide.
-5. `IsCyrillic(text)` → hide.
+4. `(db.blockNames or db.hideAllCyrillic) and NameIsCyrillic(sender)` → hide (mode 2, forced on by mode 1).
+5. `db.hideAllCyrillic and IsCyrillic(text)` → hide (mode 1).
 6. Otherwise show.
 
 `NameIsCyrillic` strips everything from the first `-` onward before testing (realm suffix).

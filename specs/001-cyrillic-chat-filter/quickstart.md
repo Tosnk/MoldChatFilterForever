@@ -21,9 +21,12 @@ Expected: every case prints `ok`, last line `N passed, 0 failed`, exit code 0.
 ## Verify in the game (manual checklist, run before tagging a version)
 
 1. Launch WoW: Forever, log in. AddOns list shows **MoldChatFilterForever** with no "out of date" tag.
-2. `/mff` opens Options, AddOns, MoldChatFilterForever. Checked: General, Trade, LookingForGroup,
-   LocalDefense, Other channels, Filter enabled, Block Cyrillic-named players. Unchecked: Say,
-   Yell, Emote, Party, Raid, Instance / Battleground, Guild / Officer, Whisper.
+2. `/mcff` opens Options, AddOns, MoldChatFilterForever. Checked: Filter enabled, Filter all
+   Cyrillic messages, Filter Cyrillic-named players (indented and greyed out while mode 1 is on),
+   General, Trade, LookingForGroup, LocalDefense, Other channels. Unchecked: Say, Yell, Emote,
+   Party, Raid, Instance / Battleground, Guild / Officer, Whisper.
+   Untick "Filter all Cyrillic messages": the names checkbox becomes editable and stays ticked.
+   Untick it too, then re-tick mode 1: the names checkbox turns back on and locks.
 3. `/mff test привет` prints `hidden`; `/mff test hello` prints `shown`; `/mff test Ärger` prints
    `shown`.
 4. Stand in a city. Wait for a Cyrillic line in Trade or General: it never appears. Latin lines

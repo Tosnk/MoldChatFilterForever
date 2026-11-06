@@ -27,6 +27,12 @@ local function isOwnMessage(sender, guid)
     return false
 end
 
+--- Mode 2 is always on while mode 1 is on (the Options panel locks the checkbox the same way).
+function ns.BlockNamesActive()
+    local db = ns.db
+    return db ~= nil and (db.blockNames == true or db.hideAllCyrillic == true)
+end
+
 --- Decide whether a chat line should be dropped. Order per contracts/chat-sources.md.
 function ns.ShouldHide(event, text, sender, guid, zoneChannelID, channelBaseName)
     local db = ns.db
@@ -40,10 +46,13 @@ function ns.ShouldHide(event, text, sender, guid, zoneChannelID, channelBaseName
     if not source or db.sources[source] ~= true then
         return false
     end
-    if db.blockNames and ns.NameIsCyrillic(sender) then
+    if ns.BlockNamesActive() and ns.NameIsCyrillic(sender) then
         return true
     end
-    return ns.IsCyrillic(text)
+    if db.hideAllCyrillic and ns.IsCyrillic(text) then
+        return true
+    end
+    return false
 end
 
 -- Filter signature: (chatFrame, event, text, sender, language, channelName, target, flags,

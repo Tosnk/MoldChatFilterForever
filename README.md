@@ -3,10 +3,12 @@
 A World of Warcraft: **Forever** addon that hides Cyrillic chat where you want it hidden and
 nowhere else.
 
-- A message containing any Cyrillic letter is dropped **whole**: no channel tag, no name, no
-  placeholder.
-- Optionally, **every** message from a character whose name is Cyrillic is dropped too, even if
-  that message is in Latin letters.
+- Two modes, both on by default:
+  1. **Filter all Cyrillic messages**: any line containing a Cyrillic letter is dropped **whole**,
+     no channel tag, no name, no placeholder. Turning this on also locks mode 2 on.
+  2. **Filter Cyrillic-named players**: **every** line from a character whose name is Cyrillic is
+     dropped, even if they type in Latin letters. With only this mode on, Cyrillic text from
+     Latin-named players stays visible.
 - You pick **where** it applies, per chat source, from Escape > Options > AddOns > MoldChatFilterForever.
 - Your own messages are never hidden, so you can still write Cyrillic yourself.
 - No libraries, no dependencies, one folder.
