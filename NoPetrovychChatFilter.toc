@@ -1,8 +1,8 @@
 ## Interface: 16001
 ## Title: NoPetrovychChatFilter
-## Notes: Hides Cyrillic chat messages and Cyrillic-named senders in the channels you choose. WoW: Forever only.
+## Notes: Collapses or hides Cyrillic chat messages and Cyrillic-named senders. WoW: Forever only. /npcf opens the settings.
 ## Author: Tosnk
-## Version: 1.0.2
+## Version: 1.1.0
 ## SavedVariables: NoPetrovychChatFilterDB
 ## IconTexture: Interface\AddOns\NoPetrovychChatFilter\icon.png
 ## Category: Chat
@@ -13,6 +13,8 @@
 Core\Detect.lua
 Core\Sources.lua
 Core\Config.lua
+Core\Log.lua
 Core\Filter.lua
+UI\Log.lua
 UI\Options.lua
 UI\Slash.lua

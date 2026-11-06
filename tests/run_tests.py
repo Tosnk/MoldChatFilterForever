@@ -27,6 +27,7 @@ CORE_FILES = [
     ROOT / "Core" / "Detect.lua",
     ROOT / "Core" / "Sources.lua",
     ROOT / "Core" / "Config.lua",
+    ROOT / "Core" / "Log.lua",
     ROOT / "Core" / "Filter.lua",
 ]
 

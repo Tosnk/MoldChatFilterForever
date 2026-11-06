@@ -1,4 +1,4 @@
--- Core/Config.lua: SavedVariables initialisation, defaults merge and reset.
+-- Core/Config.lua: SavedVariables initialisation, defaults merge, migration and reset.
 -- WoW globals are read through _G at call time so the test harness can load this file.
 local ADDON, ns = ...
 
@@ -17,9 +17,20 @@ local function copyDefaults(dst, src)
     end
 end
 
+-- 1.0.x stored two modes (hideAllCyrillic, blockNames); 1.1 has one switch, namesOnly.
+-- "Only mode 2 on" is the single old state that maps to namesOnly = true.
+local function migrate(saved)
+    if saved.namesOnly == nil and (saved.hideAllCyrillic ~= nil or saved.blockNames ~= nil) then
+        saved.namesOnly = saved.hideAllCyrillic == false and saved.blockNames == true
+    end
+    saved.hideAllCyrillic = nil
+    saved.blockNames = nil
+end
+
 --- Fill a saved table (or a fresh one) with every missing default and expose it as ns.db.
 function ns.InitDB(saved)
     saved = saved or {}
+    migrate(saved)
     copyDefaults(saved, ns.DEFAULTS)
     ns.db = saved
     return saved
@@ -29,8 +40,8 @@ end
 function ns.ResetDefaults()
     local db = ns.db
     db.enabled = ns.DEFAULTS.enabled
-    db.hideAllCyrillic = ns.DEFAULTS.hideAllCyrillic
-    db.blockNames = ns.DEFAULTS.blockNames
+    db.namesOnly = ns.DEFAULTS.namesOnly
+    db.spoiler = ns.DEFAULTS.spoiler
     for key, value in pairs(ns.DEFAULTS.sources) do
         db.sources[key] = value
     end

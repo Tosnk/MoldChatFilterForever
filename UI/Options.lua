@@ -12,50 +12,55 @@ local function AddCheckbox(layoutCategory, tbl, key, variable, label, tooltip, d
     return setting, initializer
 end
 
+local function Header(text)
+    return CreateSettingsListSectionHeaderInitializer(text)
+end
+
 local function Build()
     local layout
     category, layout = Settings.RegisterVerticalLayoutCategory("NoPetrovychChatFilter")
 
-    -- Status header: text refreshed each time the page is laid out.
-    local status = CreateSettingsListSectionHeaderInitializer("Hidden this session: 0")
-    local baseInit = status.InitFrame
-    status.InitFrame = function(self, frame)
-        self.data.name = "Hidden this session: " .. tostring(ns.hiddenCount or 0)
+    -- Counter and the log button on one row; the label is refreshed each time the row is laid out.
+    local logInit = CreateSettingsButtonInitializer("Filtered this session: 0", "Open log",
+        function() ns.OpenLog() end,
+        "Every message hidden or collapsed this session, with time, channel and sender.", true)
+    local baseInit = logInit.InitFrame
+    logInit.InitFrame = function(self, frame)
+        self.data.name = "Filtered this session: " .. tostring(ns.hiddenCount or 0)
         baseInit(self, frame)
     end
-    layout:AddInitializer(status)
+    layout:AddInitializer(logInit)
 
-    layout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Filter"))
-    AddCheckbox(category, ns.db, "enabled", "NPCF_enabled", "Filter enabled",
-        "Master switch. When off, nothing is hidden.", ns.DEFAULTS.enabled)
+    layout:AddInitializer(Header("Filter"))
 
-    -- Mode 1: any Cyrillic text. Turning it on also turns on and locks mode 2.
-    local allSetting, allInit = AddCheckbox(category, ns.db, "hideAllCyrillic", "NPCF_hideAllCyrillic",
-        "Filter all Cyrillic messages",
-        "Hide every message that contains Cyrillic letters, whoever sends it. While this is on, Cyrillic-named players are always filtered too.",
-        ns.DEFAULTS.hideAllCyrillic)
-
-    -- Mode 2: everything from Cyrillic-named senders, whatever script they type in.
-    local namesSetting, namesInit = AddCheckbox(category, ns.db, "blockNames", "NPCF_blockNames",
-        "Filter Cyrillic-named players",
-        "Hide every message from a character whose name contains Cyrillic letters, even when the message itself is in Latin letters. With only this on, Cyrillic text from Latin-named players stays visible.",
-        ns.DEFAULTS.blockNames)
-    namesInit:SetParentInitializer(allInit, function()
-        return not ns.db.hideAllCyrillic
-    end)
-    allSetting:SetValueChangedCallback(function(_, value)
-        if value and not ns.db.blockNames then
-            namesSetting:SetValue(true)
-        end
-    end)
-
-    layout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Where to filter"))
-    for _, src in ipairs(ns.SOURCES) do
-        AddCheckbox(category, ns.db.sources, src.key, "NPCF_src_" .. src.key, src.label,
-            src.tooltip, src.default)
+    -- Master switch. Every other row is its child, so they grey out while it is off.
+    local _, enabledInit = AddCheckbox(category, ns.db, "enabled", "NPCF_enabled", "Filter enabled",
+        "Master switch. When off, nothing is hidden or collapsed and the options below are locked.",
+        ns.DEFAULTS.enabled)
+    local function filterOn()
+        return ns.db.enabled == true
     end
 
-    layout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Maintenance"))
+    local _, namesInit = AddCheckbox(category, ns.db, "namesOnly", "NPCF_namesOnly",
+        "Cyrillic names only",
+        "Act only on messages from characters whose name contains Cyrillic letters, whatever script they type in. Cyrillic text from Latin-named players is left alone. Off: any message containing Cyrillic letters is matched too.",
+        ns.DEFAULTS.namesOnly)
+    namesInit:SetParentInitializer(enabledInit, filterOn)
+
+    local _, spoilerInit = AddCheckbox(category, ns.db, "spoiler", "NPCF_spoiler",
+        "Use spoiler instead of hiding",
+        "Keep the line but collapse its text behind a click-to-read link instead of removing it. Follows the same matching rule and channel selection as hiding.",
+        ns.DEFAULTS.spoiler)
+    spoilerInit:SetParentInitializer(enabledInit, filterOn)
+
+    layout:AddInitializer(Header("Where"))
+    for _, src in ipairs(ns.SOURCES) do
+        local _, init = AddCheckbox(category, ns.db.sources, src.key, "NPCF_src_" .. src.key,
+            src.label, src.tooltip, src.default)
+        init:SetParentInitializer(enabledInit, filterOn)
+    end
+
+    layout:AddInitializer(Header("Maintenance"))
     layout:AddInitializer(CreateSettingsButtonInitializer(
         "Reset to defaults", "Reset",
         function()
@@ -64,7 +69,7 @@ local function Build()
                 entry.setting:SetValue(entry.default)
             end
         end,
-        "Restores the fresh-install settings: both filter modes on, public channels filtered, group and private chat untouched.",
+        "Restores the fresh-install settings: filter on, all Cyrillic matched, spoiler on, public channels selected, group and private chat not.",
         true))
 
     Settings.RegisterAddOnCategory(category)

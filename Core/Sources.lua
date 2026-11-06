@@ -47,9 +47,9 @@ ns.SOURCES = {
 
 ns.DEFAULTS = {
     version = 1,
-    enabled = true,
-    hideAllCyrillic = true,  -- mode 1: hide every message containing Cyrillic (forces blockNames on)
-    blockNames = true,       -- mode 2: hide every message from a Cyrillic-named sender
+    enabled = true,     -- master switch; locks every other option while off
+    namesOnly = false,  -- true: act only on Cyrillic-named senders; false: any Cyrillic text too
+    spoiler = true,     -- collapse matched lines behind a click-to-read link instead of dropping them
     sources = {},
 }
 

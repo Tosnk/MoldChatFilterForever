@@ -1,19 +1,25 @@
 # NoPetrovychChatFilter
 
-A World of Warcraft: **Forever** addon that hides Cyrillic chat where you want it hidden and
-nowhere else.
+A World of Warcraft: **Forever** addon that keeps Cyrillic chat out of your way. `/npcf` opens the settings.
 
-- Two modes, both on by default:
-  1. **Filter all Cyrillic messages**: any line containing a Cyrillic letter is dropped **whole**,
-     no channel tag, no name, no placeholder. Turning this on also locks mode 2 on.
-  2. **Filter Cyrillic-named players**: **every** line from a character whose name is Cyrillic is
-     dropped, even if they type in Latin letters. With only this mode on, Cyrillic text from
-     Latin-named players stays visible.
-- You pick **where** it applies, per chat source, from Escape > Options > AddOns > NoPetrovychChatFilter.
-- Your own messages are never hidden, so you can still write Cyrillic yourself.
+## What it does
+
+Three switches plus a channel list, in Escape > Options > AddOns > NoPetrovychChatFilter:
+
+- **Filter enabled**: the master switch. While off, nothing happens and the other options are locked.
+- **Cyrillic names only**: act only on messages from characters whose name is Cyrillic, whatever
+  script they type in. Off (default): any message containing Cyrillic letters is matched too, and
+  so is everything from Cyrillic-named characters.
+- **Use spoiler instead of hiding** (default on): a matched line is kept, but its text is collapsed
+  behind a `[Petrovych detected, click to read]` link; one click reveals the original text in place.
+  Off: the line is removed whole, no channel tag, no name, no placeholder.
+- **Where**: the chat sources the filter applies to, for both spoiler and hiding.
+- **Log**: the Options page shows how many lines were filtered this session and an "Open log" button
+  that lists them all (time, channel, sender, text). Session only; the newest 500 are kept.
+- Your own messages are never touched, so you can still write Cyrillic yourself.
 - No libraries, no dependencies, one folder.
 
-## Defaults
+## Default channels
 
 | Source | Filtered by default |
 |--------|---------------------|
@@ -31,10 +37,10 @@ linked in the TOC's `X-Website`. Manual install:
 Copy the `NoPetrovychChatFilter` folder (the one containing `NoPetrovychChatFilter.toc`) into
 `World of Warcraft\_forever_\Interface\AddOns\`.
 
-For development, point a junction at the checked-out folder instead:
+For development, copy the checked-out files over the installed folder and `/reload`:
 
 ```powershell
-New-Item -ItemType Junction -Path "D:\Games\World of Warcraft\_forever_\Interface\AddOns\NoPetrovychChatFilter" -Target "C:\Repos\NoPetrovychChatFilter"
+powershell scripts/install-dev.ps1
 ```
 
 ## Slash commands
@@ -42,9 +48,12 @@ New-Item -ItemType Junction -Path "D:\Games\World of Warcraft\_forever_\Interfac
 | Command | Effect |
 |---------|--------|
 | `/npcf` (also `/nopetrovych`) | open the Options page |
+| `/npcf log` | open or close the filtered-messages log |
 | `/npcf on` / `off` / `toggle` | master switch |
-| `/npcf status` | settings and how many lines were hidden this session |
-| `/npcf test <text>` | would this text be hidden in Trade? |
+| `/npcf names` | toggle "Cyrillic names only" |
+| `/npcf spoiler` | toggle "Use spoiler instead of hiding" |
+| `/npcf status` | settings and how many lines were filtered this session |
+| `/npcf test <text>` | would this text be hidden, collapsed or shown in Trade? |
 | `/npcf reset` | restore defaults |
 
 ## Releasing
@@ -56,10 +65,10 @@ New-Item -ItemType Junction -Path "D:\Games\World of Warcraft\_forever_\Interfac
 
 ## Development
 
-Spec-driven with [Spec Kit](https://github.com/github/spec-kit): see `specs/001-cyrillic-chat-filter/`
-for the spec, plan, contracts, tasks and the in-game verification checklist (`quickstart.md`).
+Spec-driven with [Spec Kit](https://github.com/github/spec-kit): see `specs/` for each feature's spec,
+plan, contracts and tasks (`001` the filter, `002` the CurseForge release, `003` the log and spoiler mode).
 
-Core logic (detection, routing, settings) has no WoW API dependency and is tested out of game:
+Core logic (detection, routing, settings, log) has no WoW API dependency and is tested out of game:
 
 ```bash
 uv run tests/run_tests.py

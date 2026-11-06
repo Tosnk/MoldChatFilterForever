@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0
+
+- Options are now three independent switches plus the channel list: **Filter enabled** (locks everything else while off), **Cyrillic names only** (act only on messages from Cyrillic-named characters; Cyrillic text from Latin-named players is left alone) and **Use spoiler instead of hiding**.
+- Spoiler mode (new default): a matched line is kept but its text is collapsed behind a "[Petrovych detected, click to read]" link; a click reveals the original text in place. It follows the same channel selection as hiding.
+- Filtered-messages log: a "Filtered this session: N" counter with an "Open log" button in the Options page (also `/npcf log`) lists every line hidden or collapsed this session with time, channel and sender. Session only, newest 500 kept.
+- `/npcf names` and `/npcf spoiler` toggle the two switches; `/npcf status` and `/npcf test` report "collapsed" as well as "hidden".
+- Upgrading from 1.0.x: "mode 2 only" becomes "Cyrillic names only"; spoiler mode is switched on. Untick it to go back to removing lines.
+
 ## 1.0.2
 
 - New icon

@@ -5,7 +5,8 @@ local ADDON, ns = ...
 local find = string.find
 local sub = string.sub
 
-ns.hiddenCount = 0
+local LINK_PREFIX = "|Haddon:NPCF:"
+ns.LINK_PREFIX = LINK_PREFIX
 
 local function isOwnMessage(sender, guid)
     local UnitGUID = _G.UnitGUID
@@ -27,40 +28,62 @@ local function isOwnMessage(sender, guid)
     return false
 end
 
---- Mode 2 is always on while mode 1 is on (the Options panel locks the checkbox the same way).
-function ns.BlockNamesActive()
-    local db = ns.db
-    return db ~= nil and (db.blockNames == true or db.hideAllCyrillic == true)
-end
-
---- Decide whether a chat line should be dropped. Order per contracts/chat-sources.md.
-function ns.ShouldHide(event, text, sender, guid, zoneChannelID, channelBaseName)
+--- Decide what to do with a chat line: "hide" (drop it), "spoiler" (collapse it behind a
+--- click-to-read link) or nil (leave it alone). Second return is the source key.
+--- Settings (specs/003): enabled is the master switch; namesOnly restricts matching to
+--- Cyrillic-named senders; spoiler swaps dropping for collapsing. The channel selection
+--- applies to both.
+function ns.Judge(event, text, sender, guid, zoneChannelID, channelBaseName)
     local db = ns.db
     if not db or not db.enabled then
-        return false
+        return nil
     end
     if isOwnMessage(sender, guid) then
-        return false
+        return nil
     end
     local source = ns.EventToSource(event, zoneChannelID, channelBaseName)
     if not source or db.sources[source] ~= true then
-        return false
+        return nil
     end
-    if ns.BlockNamesActive() and ns.NameIsCyrillic(sender) then
-        return true
+    local match = ns.NameIsCyrillic(sender) or (not db.namesOnly and ns.IsCyrillic(text))
+    if not match then
+        return nil
     end
-    if db.hideAllCyrillic and ns.IsCyrillic(text) then
-        return true
+    return db.spoiler and "spoiler" or "hide", source
+end
+
+--- True when the line would be dropped outright.
+function ns.ShouldHide(event, text, sender, guid, zoneChannelID, channelBaseName)
+    return ns.Judge(event, text, sender, guid, zoneChannelID, channelBaseName) == "hide"
+end
+
+--- The replacement text for a collapsed line; the log id travels inside the link.
+function ns.SpoilerText(id)
+    return LINK_PREFIX .. id .. "|h|cff9d9d9d[Petrovych detected, click to read]|r|h"
+end
+
+--- Parse a clicked link back into a log id, or nil for links that are not ours.
+function ns.SpoilerIdFromLink(link)
+    if type(link) ~= "string" then
+        return nil
     end
-    return false
+    local id = link:match("^addon:NPCF:(%d+)$")
+    return id and tonumber(id) or nil
 end
 
 -- Filter signature: (chatFrame, event, text, sender, language, channelName, target, flags,
 --                    zoneChannelID, channelIndex, channelBaseName, languageID, lineID, guid, ...)
-local function filter(_, event, text, sender, _, _, _, _, zoneChannelID, _, channelBaseName, _, _, guid)
-    if ns.ShouldHide(event, text, sender, guid, zoneChannelID, channelBaseName) then
-        ns.hiddenCount = ns.hiddenCount + 1
+-- Returning true drops the line. Returning false plus a replacement arg list rewrites it, and
+-- the client takes EVERY arg from that list, so the untouched ones are passed back verbatim.
+local function filter(_, event, text, ...)
+    local sender, _, _, _, _, zoneChannelID, _, channelBaseName, _, _, guid = ...
+    local action, source = ns.Judge(event, text, sender, guid, zoneChannelID, channelBaseName)
+    if action == "hide" then
+        ns.LogAdd("hide", source, sender, text)
         return true
+    elseif action == "spoiler" then
+        local entry = ns.LogAdd("spoiler", source, sender, text)
+        return false, ns.SpoilerText(entry.id), ...
     end
     return false
 end
