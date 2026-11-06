@@ -2,10 +2,10 @@
 
 **Date**: 2026-11-06 | **Plan**: [plan.md](plan.md)
 
-## Settings (`MoldFilterForverDB`, SavedVariables, account-wide)
+## Settings (`MoldChatFilterForeverDB`, SavedVariables, account-wide)
 
 ```lua
-MoldFilterForverDB = {
+MoldChatFilterForeverDB = {
     version    = 1,        -- schema version for future migrations
     enabled    = true,     -- master switch (FR-006)
     blockNames = true,     -- hide everything from Cyrillic-named senders (FR-003)

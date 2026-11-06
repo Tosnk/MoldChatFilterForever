@@ -1,10 +1,10 @@
 # Contract: Slash Commands
 
-Aliases: `/mff`, `/moldfilter`. Arguments are case-insensitive; the first word is the command.
+Aliases: `/mcff`, `/mff`, `/moldfilter`. Arguments are case-insensitive; the first word is the command.
 
-| Command | Effect | Output (chat, prefixed `MoldFilterForver:`) |
+| Command | Effect | Output (chat, prefixed `MoldChatFilterForever:`) |
 |---------|--------|------------------------------------------|
-| *(none)* | Opens Options → AddOns → MoldFilterForver | none |
+| *(none)* | Opens Options → AddOns → MoldChatFilterForever | none |
 | `on` | `db.enabled = true` | status line |
 | `off` | `db.enabled = false` | status line |
 | `toggle` | flips `db.enabled` | status line |

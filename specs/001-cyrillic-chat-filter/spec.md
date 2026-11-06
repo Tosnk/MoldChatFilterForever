@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Input**: User description: "Create addon for wow forever only that: 1. Can filter the cyrillic text in chat and delete full message along with nickname info. Can filter out ALL text from cyrillic-named chars in the same way. 2. It should provide possibility to select where this should work. For example: LFG, City, Trade filtered. Raid/Party/Yell/Say - Not. Name it MoldFilterForver. Install it to my wow forever dir. Settings should be simple and be accessible from UI, not only chat."
+**Input**: User description: "Create addon for wow forever only that: 1. Can filter the cyrillic text in chat and delete full message along with nickname info. Can filter out ALL text from cyrillic-named chars in the same way. 2. It should provide possibility to select where this should work. For example: LFG, City, Trade filtered. Raid/Party/Yell/Say - Not. Name it MoldChatFilterForever. Install it to my wow forever dir. Settings should be simple and be accessible from UI, not only chat."
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -64,7 +64,7 @@ keep it off if they want to see those.
 
 ### User Story 3 - Choose where filtering applies, from the Options UI (Priority: P3)
 
-The player opens Escape, Options, AddOns, MoldFilterForver and sees a short list of chat
+The player opens Escape, Options, AddOns, MoldChatFilterForever and sees a short list of chat
 sources with a checkbox each: General, Trade, LookingForGroup, LocalDefense, Other channels,
 Say, Yell, Emote, Party, Raid, Instance/Battleground, Guild/Officer, Whisper. Public channels are
 checked by default; everything else is unchecked. Changes apply immediately and survive relog.

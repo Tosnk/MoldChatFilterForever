@@ -23,7 +23,7 @@ out-of-game test harness
 **Primary Dependencies**: None at runtime (FrameXML `ChatFrame_AddMessageEventFilter`, Blizzard
 `Settings` API). Dev-only: `uv`, `lupa`
 
-**Storage**: SavedVariables table `MoldFilterForverDB` (account-wide, written by the client on
+**Storage**: SavedVariables table `MoldChatFilterForeverDB` (account-wide, written by the client on
 logout/reload)
 
 **Testing**: `uv run tests/run_tests.py` executes `tests/*.lua` against `Core/*.lua` in a lupa
@@ -78,8 +78,8 @@ specs/001-cyrillic-chat-filter/
 ### Source Code (repository root)
 
 ```text
-MoldFilterForver/                 # the addon folder (junction target in the game's AddOns/)
-├── MoldFilterForver.toc
+MoldChatFilterForever/                 # the addon folder (junction target in the game's AddOns/)
+├── MoldChatFilterForever.toc
 ├── Core/
 │   ├── Detect.lua                # IsCyrillic(text), NameIsCyrillic(sender) — pure
 │   ├── Sources.lua               # source registry, defaults, EventToSource() — pure
@@ -100,8 +100,8 @@ LICENSE                           # MIT
 .gitignore
 ```
 
-**Structure Decision**: Single addon folder named exactly `MoldFilterForver` at repo root so a
-directory junction from `_forever_\Interface\AddOns\MoldFilterForver` points straight at the
+**Structure Decision**: Single addon folder named exactly `MoldChatFilterForever` at repo root so a
+directory junction from `_forever_\Interface\AddOns\MoldChatFilterForever` points straight at the
 checked-in code (constitution: Development Workflow). Tests and CI live beside it, outside the
 folder the game loads.
 

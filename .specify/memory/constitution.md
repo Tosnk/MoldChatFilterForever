@@ -1,14 +1,14 @@
 <!--
 Sync Impact Report
-- Version change: (template) → 1.0.0
-- Modified principles: none (initial ratification)
+- Version change: 1.0.0 → 1.0.1 (PATCH: Development Workflow wording after the repository-root layout)
+- Modified principles: none
 - Added sections: Core Principles (I–VI), Technical Constraints, Development Workflow, Governance
 - Removed sections: none
 - Templates: plan-template.md / spec-template.md / tasks-template.md read this file at runtime; no edits needed
 - Follow-up TODOs: none
 -->
 
-# MoldFilterForver Constitution
+# MoldChatFilterForever Constitution
 
 ## Core Principles
 
@@ -56,15 +56,17 @@ Rationale: the game cannot be unit-tested, so everything that can be isolated fr
 - Cyrillic detection operates on UTF-8 bytes (lead bytes 0xD0–0xD4), never on code points.
 - Chat interception uses `ChatFrame_AddMessageEventFilter` only; no hooking of `AddMessage`.
 - Realm-qualified sender names (`Name-Realm`) are judged on the character name part only.
-- The addon folder name, TOC name and SavedVariables name are all `MoldFilterForver`.
+- The addon folder name, TOC name and SavedVariables name are all `MoldChatFilterForever`.
 
 ## Development Workflow
 
 - Spec-driven: every feature goes constitution → spec → plan → tasks → implement, using the
   Spec Kit artifacts under `specs/`.
 - Tests for `Core/` logic run via `uv run tests/run_tests.py` and MUST pass before commit.
-- The addon folder is installed into the Forever client via a directory junction so the checked-in
-  code and the installed code are the same files.
+- The addon lives at the repository root (TOC beside `Core/` and `UI/`), the layout the CurseForge
+  GitHub packager expects; it is installed into the Forever client via a directory junction from
+  `AddOns\MoldChatFilterForever` to the repository root so checked-in and installed code are the
+  same files. Tooling folders (`specs/`, `tests/`, `.specify/`) are ignored by the game and by `.pkgmeta`.
 - Commits are small and reference the task id (`T0xx`) they complete.
 
 ## Governance
@@ -76,4 +78,4 @@ MINOR for new principles or materially expanded guidance, PATCH for wording. Eve
 Constitution Check must cite the principle it is evaluating and justify any deviation in the
 plan's Complexity Tracking table.
 
-**Version**: 1.0.0 | **Ratified**: 2026-11-06 | **Last Amended**: 2026-11-06
+**Version**: 1.0.1 | **Ratified**: 2026-11-06 | **Last Amended**: 2026-11-06

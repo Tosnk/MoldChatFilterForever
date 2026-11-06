@@ -1,4 +1,4 @@
-# MoldFilterForver
+# MoldChatFilterForever
 
 A World of Warcraft: **Forever** addon that hides Cyrillic chat where you want it hidden and
 nowhere else.
@@ -7,7 +7,7 @@ nowhere else.
   placeholder.
 - Optionally, **every** message from a character whose name is Cyrillic is dropped too, even if
   that message is in Latin letters.
-- You pick **where** it applies, per chat source, from Escape > Options > AddOns > MoldFilterForver.
+- You pick **where** it applies, per chat source, from Escape > Options > AddOns > MoldChatFilterForever.
 - Your own messages are never hidden, so you can still write Cyrillic yourself.
 - No libraries, no dependencies, one folder.
 
@@ -23,24 +23,34 @@ Chat bubbles above heads are drawn by the client and are not affected.
 
 ## Install
 
-Copy the `MoldFilterForver` folder (the one containing `MoldFilterForver.toc`) into
+From CurseForge (recommended, auto-updates through the CurseForge app): see the project page
+linked in the TOC's `X-Website`. Manual install:
+
+Copy the `MoldChatFilterForever` folder (the one containing `MoldChatFilterForever.toc`) into
 `World of Warcraft\_forever_\Interface\AddOns\`.
 
 For development, point a junction at the checked-out folder instead:
 
 ```powershell
-New-Item -ItemType Junction -Path "D:\Games\World of Warcraft\_forever_\Interface\AddOns\MoldFilterForver" -Target "C:\Repos\MoldFilterForver\MoldFilterForver"
+New-Item -ItemType Junction -Path "D:\Games\World of Warcraft\_forever_\Interface\AddOns\MoldChatFilterForever" -Target "C:\Repos\MoldChatFilterForever"
 ```
 
 ## Slash commands
 
 | Command | Effect |
 |---------|--------|
-| `/mff` or `/moldfilter` | open the Options page |
-| `/mff on` / `off` / `toggle` | master switch |
-| `/mff status` | settings and how many lines were hidden this session |
-| `/mff test <text>` | would this text be hidden in Trade? |
-| `/mff reset` | restore defaults |
+| `/mcff` (also `/mff`, `/moldfilter`) | open the Options page |
+| `/mcff on` / `off` / `toggle` | master switch |
+| `/mcff status` | settings and how many lines were hidden this session |
+| `/mcff test <text>` | would this text be hidden in Trade? |
+| `/mcff reset` | restore defaults |
+
+## Releasing
+
+1. Bump `## Version` in `MoldChatFilterForever.toc` and add a matching `## X.Y.Z` section to `CHANGELOG.md`.
+2. `powershell scripts/release-check.ps1 -ExpectedVersion X.Y.Z`
+3. Commit, tag `vX.Y.Z`, push the tag. GitHub Actions publishes the GitHub release; CurseForge's
+   GitHub webhook packages the tag with `.pkgmeta` and uses the CHANGELOG section as the file changelog.
 
 ## Development
 
