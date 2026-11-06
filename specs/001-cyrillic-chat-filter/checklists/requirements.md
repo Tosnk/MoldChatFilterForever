@@ -31,7 +31,7 @@
 
 ## Notes
 
-- Slash-command names (`/mff`, `/moldfilter`) and the Options, AddOns location are user-facing
+- Slash-command names (`/npcf`, `/nopetrovych`) and the Options, AddOns location are user-facing
   contract, not implementation detail, so they stay in the spec.
 - No clarifications were needed: the user's example fixed the defaults, and the remaining choices
   (whisper, guild, emote grouped with private chat) are recorded under Assumptions.

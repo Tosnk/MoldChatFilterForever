@@ -54,7 +54,7 @@ if CreateFrame then
             return
         end
         self:UnregisterEvent("ADDON_LOADED")
-        MoldChatFilterForeverDB = ns.InitDB(MoldChatFilterForeverDB)
+        NoPetrovychChatFilterDB = ns.InitDB(NoPetrovychChatFilterDB)
         for _, fn in ipairs(loadedCallbacks) do
             fn()
         end

@@ -1,10 +1,10 @@
 # Contract: Slash Commands
 
-Aliases: `/mcff`, `/mff`, `/moldfilter`. Arguments are case-insensitive; the first word is the command.
+Aliases: `/npcf`, `/nopetrovych`. Arguments are case-insensitive; the first word is the command.
 
-| Command | Effect | Output (chat, prefixed `MoldChatFilterForever:`) |
+| Command | Effect | Output (chat, prefixed `NoPetrovychChatFilter:`) |
 |---------|--------|------------------------------------------|
-| *(none)* | Opens Options → AddOns → MoldChatFilterForever | none |
+| *(none)* | Opens Options → AddOns → NoPetrovychChatFilter | none |
 | `on` | `db.enabled = true` | status line |
 | `off` | `db.enabled = false` | status line |
 | `toggle` | flips `db.enabled` | status line |

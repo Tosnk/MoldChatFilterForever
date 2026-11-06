@@ -8,7 +8,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$tocPath = Join-Path $PSScriptRoot "..\MoldChatFilterForever.toc"
+$tocPath = Join-Path $PSScriptRoot "..\NoPetrovychChatFilter.toc"
 $changelogPath = Join-Path $PSScriptRoot "..\CHANGELOG.md"
 
 $tocContent = Get-Content -LiteralPath $tocPath

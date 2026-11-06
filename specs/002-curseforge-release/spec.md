@@ -6,25 +6,25 @@
 
 **Status**: Draft
 
-**Input**: User description: "rename it to MoldChatFilterForever. Then prepare it for curseforge publishing (I already published EasyPrescience) make sure it supports changelogs and autoupdates with github hook (use docs and info from my existing addon) publish it to curse forge and provide me a project curse forge link"
+**Input**: User description: "rename it to NoPetrovychChatFilter. Then prepare it for curseforge publishing (I already published EasyPrescience) make sure it supports changelogs and autoupdates with github hook (use docs and info from my existing addon) publish it to curse forge and provide me a project curse forge link"
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - The addon is called MoldChatFilterForever everywhere (Priority: P1)
+### User Story 1 - The addon is called NoPetrovychChatFilter everywhere (Priority: P1)
 
-The player sees "MoldChatFilterForever" in the AddOns list, the Options page, chat output, the
+The player sees "NoPetrovychChatFilter" in the AddOns list, the Options page, chat output, the
 GitHub repository and the CurseForge project. No trace of the old spelling remains.
 
 **Independent Test**: search the repository for the old name and find nothing; the game's AddOns
-list shows the new name; `/mcff` opens the options.
+list shows the new name; `/npcf` opens the options.
 
 **Acceptance Scenarios**:
 
 1. **Given** the renamed addon is installed, **When** the game starts, **Then** the AddOns list,
-   Options page and `/mcff status` prefix all read MoldChatFilterForever.
+   Options page and `/npcf status` prefix all read NoPetrovychChatFilter.
 2. **Given** the repository, **When** searched for the old name, **Then** no file matches.
-3. **Given** `/mff` and `/moldfilter` worked before, **When** typed now, **Then** they still work and
-   `/mcff` is a third alias.
+3. **Given** `/npcf` and `/nopetrovych` worked before, **When** typed now, **Then** they still work and
+   `/npcf` is a third alias.
 
 ---
 
@@ -45,7 +45,7 @@ WoW: Forever whose changelog is the 1.0.0 section; the GitHub release 1.0.0 exis
 2. **Given** the TOC version or CHANGELOG does not match the tag, **When** the release workflow
    runs, **Then** it fails and no GitHub release is created.
 3. **Given** the packaged zip, **When** extracted, **Then** it contains one folder
-   `MoldChatFilterForever` with the TOC, Core, UI, icon, license and changelog, and none of the
+   `NoPetrovychChatFilter` with the TOC, Core, UI, icon, license and changelog, and none of the
    repository's specs, tests or tooling.
 
 ---
@@ -61,7 +61,7 @@ downloadable 1.0.0 file.
 ## Requirements *(mandatory)*
 
 - **FR-001**: Folder, TOC, SavedVariables, Settings category, chat prefix, repository and
-  installation junction MUST use the name MoldChatFilterForever.
+  installation junction MUST use the name NoPetrovychChatFilter.
 - **FR-002**: The repository layout MUST match what the CurseForge packager expects for this
   author's existing addon: TOC at repository root, `.pkgmeta` with `package-as`, `ignore`,
   `manual-changelog: CHANGELOG.md`, `license-output`.

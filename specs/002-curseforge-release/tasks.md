@@ -4,9 +4,9 @@
 
 ## Phase 1: Rename (US1)
 
-- [x] T101 [US1] Move `MoldFilterForver/*` to repository root; rename TOC to `MoldChatFilterForever.toc`
+- [x] T101 [US1] Move `MoldFilterForver/*` to repository root; rename TOC to `NoPetrovychChatFilter.toc`
 - [x] T102 [US1] Replace every occurrence of the old name (addon, SavedVariables, slash globals, settings variable prefix, docs, tests, workflows)
-- [x] T103 [US1] Add `/mcff` alias; keep `/mff` and `/moldfilter`
+- [x] T103 [US1] Add `/npcf` alias; keep `/npcf` and `/nopetrovych`
 - [x] T104 [US1] Rename GitHub repository and local folder; recreate the AddOns junction to the repository root
 - [x] T105 [US1] Amend constitution Development Workflow (junction target) as PATCH 1.0.1
 
@@ -29,7 +29,7 @@
 
 ## Outcome (2026-11-06)
 
-- CurseForge project 1786481 created: https://www.curseforge.com/wow/addons/moldchatfilterforever (pending moderation).
-- Packager webhook installed; tag `v1.0.0` was packaged by CurseForge within a minute (one `MoldChatFilterForever/` folder, no tooling files).
+- CurseForge project 1786481 created: https://www.curseforge.com/wow/addons/nopetrovychchatfilter (pending moderation).
+- Packager webhook installed; tag `v1.0.0` was packaged by CurseForge within a minute (one `NoPetrovychChatFilter/` folder, no tooling files).
 - GitHub release 1.0.0 was created by hand because the first workflow run failed on CRLF line endings; `.gitattributes` now forces LF and the check strips CR, so `v1.0.1+` will release automatically.
 - The AddOns junction was removed at the user's request; the addon will be installed from CurseForge once approved.

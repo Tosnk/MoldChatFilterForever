@@ -8,7 +8,7 @@ Sync Impact Report
 - Follow-up TODOs: none
 -->
 
-# MoldChatFilterForever Constitution
+# NoPetrovychChatFilter Constitution
 
 ## Core Principles
 
@@ -56,7 +56,7 @@ Rationale: the game cannot be unit-tested, so everything that can be isolated fr
 - Cyrillic detection operates on UTF-8 bytes (lead bytes 0xD0–0xD4), never on code points.
 - Chat interception uses `ChatFrame_AddMessageEventFilter` only; no hooking of `AddMessage`.
 - Realm-qualified sender names (`Name-Realm`) are judged on the character name part only.
-- The addon folder name, TOC name and SavedVariables name are all `MoldChatFilterForever`.
+- The addon folder name, TOC name and SavedVariables name are all `NoPetrovychChatFilter`.
 
 ## Development Workflow
 
@@ -65,7 +65,7 @@ Rationale: the game cannot be unit-tested, so everything that can be isolated fr
 - Tests for `Core/` logic run via `uv run tests/run_tests.py` and MUST pass before commit.
 - The addon lives at the repository root (TOC beside `Core/` and `UI/`), the layout the CurseForge
   GitHub packager expects; it is installed into the Forever client via a directory junction from
-  `AddOns\MoldChatFilterForever` to the repository root so checked-in and installed code are the
+  `AddOns\NoPetrovychChatFilter` to the repository root so checked-in and installed code are the
   same files. Tooling folders (`specs/`, `tests/`, `.specify/`) are ignored by the game and by `.pkgmeta`.
 - Commits are small and reference the task id (`T0xx`) they complete.
 

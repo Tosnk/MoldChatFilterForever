@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Input**: User description: "Create addon for wow forever only that: 1. Can filter the cyrillic text in chat and delete full message along with nickname info. Can filter out ALL text from cyrillic-named chars in the same way. 2. It should provide possibility to select where this should work. For example: LFG, City, Trade filtered. Raid/Party/Yell/Say - Not. Name it MoldChatFilterForever. Install it to my wow forever dir. Settings should be simple and be accessible from UI, not only chat."
+**Input**: User description: "Create addon for wow forever only that: 1. Can filter the cyrillic text in chat and delete full message along with nickname info. Can filter out ALL text from cyrillic-named chars in the same way. 2. It should provide possibility to select where this should work. For example: LFG, City, Trade filtered. Raid/Party/Yell/Say - Not. Name it NoPetrovychChatFilter. Install it to my wow forever dir. Settings should be simple and be accessible from UI, not only chat."
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -66,7 +66,7 @@ Latin line is hidden.
 
 ### User Story 3 - Choose where filtering applies, from the Options UI (Priority: P3)
 
-The player opens Escape, Options, AddOns, MoldChatFilterForever and sees a short list of chat
+The player opens Escape, Options, AddOns, NoPetrovychChatFilter and sees a short list of chat
 sources with a checkbox each: General, Trade, LookingForGroup, LocalDefense, Other channels,
 Say, Yell, Emote, Party, Raid, Instance/Battleground, Guild/Officer, Whisper. Public channels are
 checked by default; everything else is unchecked. Changes apply immediately and survive relog.
@@ -88,26 +88,26 @@ have a party member post Cyrillic, see it disappear. `/reload`; the ticks are as
    **Then** the settings are as they left them.
 4. **Given** the panel is open, **When** the player clicks "Reset to defaults", **Then** every
    setting returns to its fresh-install value.
-5. **Given** the player types `/mff` (or `/moldfilter`) with no arguments, **Then** the Options panel
+5. **Given** the player types `/npcf` (or `/nopetrovych`) with no arguments, **Then** the Options panel
    opens on the addon's page.
 
 ---
 
 ### User Story 4 - Quick status and test from chat (Priority: P4)
 
-The player can type `/mff status` to see whether filtering is on, which sources are filtered and
-how many lines were hidden this session, `/mff on` or `/mff off` to flip the master switch, and
-`/mff test <text>` to check whether a given text would be hidden.
+The player can type `/npcf status` to see whether filtering is on, which sources are filtered and
+how many lines were hidden this session, `/npcf on` or `/npcf off` to flip the master switch, and
+`/npcf test <text>` to check whether a given text would be hidden.
 
 **Why this priority**: Convenience only; everything here is also available in the panel.
 
-**Independent Test**: `/mff test привет` prints "hidden"; `/mff test hello` prints "shown".
+**Independent Test**: `/npcf test привет` prints "hidden"; `/npcf test hello` prints "shown".
 
 **Acceptance Scenarios**:
 
-1. **Given** the addon is loaded, **When** `/mff status` is typed, **Then** one or two lines report
+1. **Given** the addon is loaded, **When** `/npcf status` is typed, **Then** one or two lines report
    master state, hidden-line count for this session and the list of filtered sources.
-2. **Given** the addon is loaded, **When** `/mff off` is typed, **Then** the master switch is off and
+2. **Given** the addon is loaded, **When** `/npcf off` is typed, **Then** the master switch is off and
    the Options panel reflects it when next opened.
 
 ---
@@ -150,10 +150,10 @@ how many lines were hidden this session, `/mff on` or `/mff off` to flip the mas
   and a "Reset to defaults" control.
 - **FR-008**: Settings MUST persist per account and survive `/reload` and relog.
 - **FR-009**: Setting changes MUST take effect on the next message without a reload.
-- **FR-010**: The addon MUST provide `/mff` and `/moldfilter` commands: no argument opens the
+- **FR-010**: The addon MUST provide `/npcf` and `/nopetrovych` commands: no argument opens the
   Options page; `on`, `off`, `status`, `test <text>` behave as described in User Story 4.
 - **FR-011**: The addon MUST count hidden lines for the current session and show the count in the
-  Options panel and in `/mff status`.
+  Options panel and in `/npcf status`.
 - **FR-012**: The addon MUST load only on WoW: Forever and declare no other client versions.
 - **FR-013**: The addon MUST NOT depend on any library or other addon.
 - **FR-014**: Realm-qualified sender names MUST be judged on the character-name part only.

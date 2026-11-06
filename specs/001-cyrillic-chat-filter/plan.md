@@ -11,7 +11,7 @@ but only for chat sources the player has ticked (public channels by default, nev
 whisper/guild unless asked). Implemented as a single-folder WoW: Forever addon that registers
 `ChatFrame_AddMessageEventFilter` callbacks (whole-line drop), detects Cyrillic by UTF-8 lead
 bytes, stores settings in one account-wide SavedVariables table, and exposes them through the
-client's Settings API panel plus `/mff` slash commands. Pure logic (detection, event-to-source
+client's Settings API panel plus `/npcf` slash commands. Pure logic (detection, event-to-source
 routing, defaults) lives in `Core/` without WoW API calls and is exercised by a Python+lupa test
 harness run with `uv`.
 
@@ -23,7 +23,7 @@ out-of-game test harness
 **Primary Dependencies**: None at runtime (FrameXML `ChatFrame_AddMessageEventFilter`, Blizzard
 `Settings` API). Dev-only: `uv`, `lupa`
 
-**Storage**: SavedVariables table `MoldChatFilterForeverDB` (account-wide, written by the client on
+**Storage**: SavedVariables table `NoPetrovychChatFilterDB` (account-wide, written by the client on
 logout/reload)
 
 **Testing**: `uv run tests/run_tests.py` executes `tests/*.lua` against `Core/*.lua` in a lupa
@@ -78,8 +78,8 @@ specs/001-cyrillic-chat-filter/
 ### Source Code (repository root)
 
 ```text
-MoldChatFilterForever/                 # the addon folder (junction target in the game's AddOns/)
-├── MoldChatFilterForever.toc
+NoPetrovychChatFilter/                 # the addon folder (junction target in the game's AddOns/)
+├── NoPetrovychChatFilter.toc
 ├── Core/
 │   ├── Detect.lua                # IsCyrillic(text), NameIsCyrillic(sender) — pure
 │   ├── Sources.lua               # source registry, defaults, EventToSource() — pure
@@ -87,7 +87,7 @@ MoldChatFilterForever/                 # the addon folder (junction target in th
 │   └── Filter.lua                # ChatFrame_AddMessageEventFilter wiring, own-message guard, counter
 └── UI/
     ├── Options.lua               # Settings API panel
-    └── Slash.lua                 # /mff, /moldfilter
+    └── Slash.lua                 # /npcf, /nopetrovych
 
 tests/
 ├── run_tests.py                  # uv script (PEP 723 deps: lupa); loads Core/*.lua with stub namespace
@@ -100,8 +100,8 @@ LICENSE                           # MIT
 .gitignore
 ```
 
-**Structure Decision**: Single addon folder named exactly `MoldChatFilterForever` at repo root so a
-directory junction from `_forever_\Interface\AddOns\MoldChatFilterForever` points straight at the
+**Structure Decision**: Single addon folder named exactly `NoPetrovychChatFilter` at repo root so a
+directory junction from `_forever_\Interface\AddOns\NoPetrovychChatFilter` points straight at the
 checked-in code (constitution: Development Workflow). Tests and CI live beside it, outside the
 folder the game loads.
 

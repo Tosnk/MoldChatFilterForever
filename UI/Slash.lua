@@ -1,7 +1,7 @@
--- UI/Slash.lua: /mcff, /mff and /moldfilter, mirroring the Options panel (contracts/slash-commands.md).
+-- UI/Slash.lua: /npcf and /nopetrovych, mirroring the Options panel (contracts/slash-commands.md).
 local ADDON, ns = ...
 
-local PREFIX = "|cff33ff99MoldChatFilterForever|r: "
+local PREFIX = "|cff33ff99NoPetrovychChatFilter|r: "
 
 local function Print(text)
     DEFAULT_CHAT_FRAME:AddMessage(PREFIX .. text)
@@ -26,17 +26,16 @@ end
 
 local function Usage()
     Print("commands:")
-    Print("  /mcff                open the Options page")
-    Print("  /mcff on | off | toggle")
-    Print("  /mcff status         show settings and hidden count")
-    Print("  /mcff test <text>    would this text be hidden?")
-    Print("  /mcff reset          restore defaults")
+    Print("  /npcf                open the Options page")
+    Print("  /npcf on | off | toggle")
+    Print("  /npcf status         show settings and hidden count")
+    Print("  /npcf test <text>    would this text be hidden?")
+    Print("  /npcf reset          restore defaults")
 end
 
-SLASH_MOLDCHATFILTERFOREVER1 = "/mcff"
-SLASH_MOLDCHATFILTERFOREVER2 = "/mff"
-SLASH_MOLDCHATFILTERFOREVER3 = "/moldfilter"
-SlashCmdList.MOLDCHATFILTERFOREVER = function(input)
+SLASH_NOPETROVYCHCHATFILTER1 = "/npcf"
+SLASH_NOPETROVYCHCHATFILTER2 = "/nopetrovych"
+SlashCmdList.NOPETROVYCHCHATFILTER = function(input)
     local db = ns.db
     if not db then
         return

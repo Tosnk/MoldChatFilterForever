@@ -1,7 +1,7 @@
 # Contract: Chat Sources and Event Routing
 
 Every chat event the addon hooks resolves to exactly one source key. The filter consults
-`MoldChatFilterForeverDB.sources[key]` for that key.
+`NoPetrovychChatFilterDB.sources[key]` for that key.
 
 ## Source registry (order = Options panel order)
 

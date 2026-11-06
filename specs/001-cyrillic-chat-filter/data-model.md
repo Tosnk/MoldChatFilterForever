@@ -2,10 +2,10 @@
 
 **Date**: 2026-11-06 | **Plan**: [plan.md](plan.md)
 
-## Settings (`MoldChatFilterForeverDB`, SavedVariables, account-wide)
+## Settings (`NoPetrovychChatFilterDB`, SavedVariables, account-wide)
 
 ```lua
-MoldChatFilterForeverDB = {
+NoPetrovychChatFilterDB = {
     version    = 1,        -- schema version for future migrations
     enabled    = true,     -- master switch (FR-006)
     hideAllCyrillic = true, -- mode 1: hide any message containing Cyrillic; forces blockNames (FR-003)
@@ -53,7 +53,7 @@ registration. See `contracts/chat-sources.md` for the full table.
 ## Session Counter
 
 `ns.hiddenCount` (number, starts at 0 on load, never saved). Incremented each time a filter
-callback returns `true`. Read by `/mff status` and by the Options panel's status line (FR-011).
+callback returns `true`. Read by `/npcf status` and by the Options panel's status line (FR-011).
 
 ## Runtime namespace (`ns`, the addon's private table)
 

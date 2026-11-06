@@ -4,7 +4,7 @@
 
 ## Summary
 
-Rename everything to MoldChatFilterForever, flatten the addon to the repository root (the layout
+Rename everything to NoPetrovychChatFilter, flatten the addon to the repository root (the layout
 the CurseForge GitHub packager and the author's EasyPrescience repo use), add `.pkgmeta`,
 `CHANGELOG.md`, a release check script and a tag-triggered GitHub release workflow, create the
 CurseForge project in the browser, install its packager webhook on the repository, make the
@@ -20,7 +20,7 @@ git tag `vX.Y.Z`; `scripts/release-check.ps1` and the release workflow enforce a
 
 **GitHub releases**: `.github/workflows/release.yml` on `v*` tags: check, test, zip, `gh release create`.
 
-**Install**: directory junction `AddOns\MoldChatFilterForever` → repository root (the game ignores
+**Install**: directory junction `AddOns\NoPetrovychChatFilter` → repository root (the game ignores
 the extra tooling folders).
 
 ## Constitution Check
@@ -38,7 +38,7 @@ the extra tooling folders).
 ## Project Structure
 
 ```text
-MoldChatFilterForever.toc      Core/   UI/   icon.png   LICENSE   CHANGELOG.md   README.md
+NoPetrovychChatFilter.toc      Core/   UI/   icon.png   LICENSE   CHANGELOG.md   README.md
 .pkgmeta                       scripts/release-check.ps1
 .github/workflows/tests.yml    .github/workflows/release.yml
 specs/  tests/  .specify/  .claude/     (ignored by the packager)

@@ -1,4 +1,4 @@
-package-as: MoldChatFilterForever
+package-as: NoPetrovychChatFilter
 ignore:
   - .claude
   - .github

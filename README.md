@@ -1,4 +1,4 @@
-# MoldChatFilterForever
+# NoPetrovychChatFilter
 
 A World of Warcraft: **Forever** addon that hides Cyrillic chat where you want it hidden and
 nowhere else.
@@ -9,7 +9,7 @@ nowhere else.
   2. **Filter Cyrillic-named players**: **every** line from a character whose name is Cyrillic is
      dropped, even if they type in Latin letters. With only this mode on, Cyrillic text from
      Latin-named players stays visible.
-- You pick **where** it applies, per chat source, from Escape > Options > AddOns > MoldChatFilterForever.
+- You pick **where** it applies, per chat source, from Escape > Options > AddOns > NoPetrovychChatFilter.
 - Your own messages are never hidden, so you can still write Cyrillic yourself.
 - No libraries, no dependencies, one folder.
 
@@ -28,28 +28,28 @@ Chat bubbles above heads are drawn by the client and are not affected.
 From CurseForge (recommended, auto-updates through the CurseForge app): see the project page
 linked in the TOC's `X-Website`. Manual install:
 
-Copy the `MoldChatFilterForever` folder (the one containing `MoldChatFilterForever.toc`) into
+Copy the `NoPetrovychChatFilter` folder (the one containing `NoPetrovychChatFilter.toc`) into
 `World of Warcraft\_forever_\Interface\AddOns\`.
 
 For development, point a junction at the checked-out folder instead:
 
 ```powershell
-New-Item -ItemType Junction -Path "D:\Games\World of Warcraft\_forever_\Interface\AddOns\MoldChatFilterForever" -Target "C:\Repos\MoldChatFilterForever"
+New-Item -ItemType Junction -Path "D:\Games\World of Warcraft\_forever_\Interface\AddOns\NoPetrovychChatFilter" -Target "C:\Repos\NoPetrovychChatFilter"
 ```
 
 ## Slash commands
 
 | Command | Effect |
 |---------|--------|
-| `/mcff` (also `/mff`, `/moldfilter`) | open the Options page |
-| `/mcff on` / `off` / `toggle` | master switch |
-| `/mcff status` | settings and how many lines were hidden this session |
-| `/mcff test <text>` | would this text be hidden in Trade? |
-| `/mcff reset` | restore defaults |
+| `/npcf` (also `/nopetrovych`) | open the Options page |
+| `/npcf on` / `off` / `toggle` | master switch |
+| `/npcf status` | settings and how many lines were hidden this session |
+| `/npcf test <text>` | would this text be hidden in Trade? |
+| `/npcf reset` | restore defaults |
 
 ## Releasing
 
-1. Bump `## Version` in `MoldChatFilterForever.toc` and add a matching `## X.Y.Z` section to `CHANGELOG.md`.
+1. Bump `## Version` in `NoPetrovychChatFilter.toc` and add a matching `## X.Y.Z` section to `CHANGELOG.md`.
 2. `powershell scripts/release-check.ps1 -ExpectedVersion X.Y.Z`
 3. Commit, tag `vX.Y.Z`, push the tag. GitHub Actions publishes the GitHub release; CurseForge's
    GitHub webhook packages the tag with `.pkgmeta` and uses the CHANGELOG section as the file changelog.
