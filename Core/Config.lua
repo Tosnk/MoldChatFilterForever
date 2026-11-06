@@ -25,6 +25,11 @@ local function migrate(saved)
     end
     saved.hideAllCyrillic = nil
     saved.blockNames = nil
+    -- 1.1.0 switched spoiler on for everyone; 1.1.1 makes hiding the default again.
+    if (saved.version or 0) < 2 then
+        saved.spoiler = nil
+        saved.version = 2
+    end
 end
 
 --- Fill a saved table (or a fresh one) with every missing default and expose it as ns.db.

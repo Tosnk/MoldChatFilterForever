@@ -46,10 +46,10 @@ ns.SOURCES = {
 }
 
 ns.DEFAULTS = {
-    version = 1,
+    version = 2,        -- bumped in 1.1.1 when spoiler stopped being the default
     enabled = true,     -- master switch; locks every other option while off
     namesOnly = false,  -- true: act only on Cyrillic-named senders; false: any Cyrillic text too
-    spoiler = true,     -- collapse matched lines behind a click-to-read link instead of dropping them
+    spoiler = false,    -- collapse matched lines behind a click-to-read link instead of dropping them
     sources = {},
 }
 

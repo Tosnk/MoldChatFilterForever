@@ -126,11 +126,27 @@ function ns.ToggleLog()
     end
 end
 
--- Click-to-read: swap the collapsed link for the original text in place, in every chat window
--- that still holds the line; if none does (scrolled out), show it in the item-ref popup instead.
+-- Click-to-read: swap the collapsed link for the original text in place, in every message
+-- frame that still holds the line. That is every ScrollingMessageFrame in the UI, not only
+-- ChatFrame1-10: chat addons (EllesmereUIChat, Prat...) draw their own unnamed windows copied
+-- from Blizzard's buffers. If no frame holds the line any more, show it in the item-ref popup,
+-- one frame later so the client's own link handling cannot hide it again.
+local function EachMessageFrame(fn)
+    local frame = EnumerateFrames()
+    while frame do
+        if not (frame.IsForbidden and frame:IsForbidden())
+            and frame.TransformMessages and frame.GetObjectType
+            and frame:GetObjectType() == "ScrollingMessageFrame" then
+            fn(frame)
+        end
+        frame = EnumerateFrames(frame)
+    end
+end
+
 local function Reveal(id)
     local entry = ns.LogFind(id)
     if not entry then
+        DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99NoPetrovychChatFilter|r: that line is no longer in the log (it was cleared).")
         return
     end
     local token = ns.LINK_PREFIX .. id .. "|h"
@@ -146,30 +162,54 @@ local function Reveal(id)
         changed = true
         return sub(message, 1, s - 1) .. entry.text .. sub(message, e + 2), ...
     end
-    for i = 1, (NUM_CHAT_WINDOWS or 10) do
-        local chatFrame = _G["ChatFrame" .. i]
-        if chatFrame and chatFrame.TransformMessages then
-            chatFrame:TransformMessages(predicate, transform)
-        end
+    EachMessageFrame(function(frame)
+        pcall(frame.TransformMessages, frame, predicate, transform)
+    end)
+    entry.revealed = true
+    if changed then
+        return
     end
-    if not changed and ItemRefTooltip then
+    local function popup()
+        if not ItemRefTooltip then
+            return
+        end
         ItemRefTooltip:SetOwner(UIParent, "ANCHOR_PRESERVE")
         ItemRefTooltip:ClearLines()
         ItemRefTooltip:AddLine(entry.sender ~= "" and entry.sender or "?", 1, 0.82, 0)
         ItemRefTooltip:AddLine(entry.text, 1, 1, 1, true)
         ItemRefTooltip:Show()
     end
-end
-
-local function OnSetItemRef(_, link)
-    local id = ns.SpoilerIdFromLink(link)
-    if id then
-        Reveal(id)
+    if C_Timer and C_Timer.After then
+        C_Timer.After(0, popup)
+    else
+        popup()
     end
 end
 
+-- The click can arrive through several paths depending on the client build and chat addons;
+-- listen on all of them and let the first one win for a given line.
+local lastId, lastTime = nil, 0
+local function OnLink(link)
+    local id = ns.SpoilerIdFromLink(link)
+    if not id then
+        return
+    end
+    local now = GetTime and GetTime() or 0
+    if id == lastId and now - lastTime < 0.5 then
+        return
+    end
+    lastId, lastTime = id, now
+    Reveal(id)
+end
+
 if EventRegistry and EventRegistry.RegisterCallback then
-    EventRegistry:RegisterCallback("SetItemRef", OnSetItemRef, ns)
-elseif hooksecurefunc then
-    hooksecurefunc("SetItemRef", function(link) OnSetItemRef(nil, link) end)
+    EventRegistry:RegisterCallback("SetItemRef", function(_, link) OnLink(link) end, ns)
+end
+if hooksecurefunc then
+    if SetItemRef then
+        hooksecurefunc("SetItemRef", function(link) OnLink(link) end)
+    end
+    if ChatFrame_OnHyperlinkShow then
+        hooksecurefunc("ChatFrame_OnHyperlinkShow", function(_, link) OnLink(link) end)
+    end
 end

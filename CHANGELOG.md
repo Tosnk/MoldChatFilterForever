@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1
+
+- Spoiler mode is now off by default: a fresh install hides matched lines; tick "Use spoiler instead of hiding" to collapse them instead. Upgrading from 1.1.0 goes back to hiding too.
+- Click-to-read now works in chat windows drawn by chat addons (EllesmereUIChat and others): the reveal rewrites every message frame, not just ChatFrame1-10, and the popup fallback is no longer hidden by the client's own link handling.
+
 ## 1.1.0
 
 - Options are now three independent switches plus the channel list: **Filter enabled** (locks everything else while off), **Cyrillic names only** (act only on messages from Cyrillic-named characters; Cyrillic text from Latin-named players is left alone) and **Use spoiler instead of hiding**.

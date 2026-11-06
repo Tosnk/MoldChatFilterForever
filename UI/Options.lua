@@ -69,7 +69,7 @@ local function Build()
                 entry.setting:SetValue(entry.default)
             end
         end,
-        "Restores the fresh-install settings: filter on, all Cyrillic matched, spoiler on, public channels selected, group and private chat not.",
+        "Restores the fresh-install settings: filter on, hiding (no spoiler), all Cyrillic matched, public channels selected, group and private chat not.",
         true))
 
     Settings.RegisterAddOnCategory(category)

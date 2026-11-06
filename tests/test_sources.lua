@@ -19,8 +19,8 @@ T.case("DEFAULTS: public channels on, everything else off (constitution III)", f
     end
     T.eq(ns.DEFAULTS.enabled, true, "enabled")
     T.eq(ns.DEFAULTS.namesOnly, false, "namesOnly")
-    T.eq(ns.DEFAULTS.spoiler, true, "spoiler")
-    T.eq(ns.DEFAULTS.version, 1, "version")
+    T.eq(ns.DEFAULTS.spoiler, false, "spoiler")
+    T.eq(ns.DEFAULTS.version, 2, "version")
 end)
 
 T.case("EventToSource: numbered channels by zoneChannelID", function()
@@ -85,7 +85,7 @@ T.case("InitDB: fresh install gets defaults, existing keys kept, unknown keys ke
     local fresh = ns.InitDB(nil)
     T.eq(fresh.enabled, true)
     T.eq(fresh.sources.party, false)
-    T.eq(fresh.version, 1)
+    T.eq(fresh.version, 2)
 
     local old = { enabled = false, sources = { trade = false }, futureKey = "x" }
     local db = ns.InitDB(old)
@@ -97,11 +97,11 @@ T.case("InitDB: fresh install gets defaults, existing keys kept, unknown keys ke
 end)
 
 T.case("ResetDefaults: restores every user-facing setting", function()
-    local db = ns.InitDB({ enabled = false, namesOnly = true, spoiler = false, sources = { party = true, trade = false } })
+    local db = ns.InitDB({ version = 2, enabled = false, namesOnly = true, spoiler = true, sources = { party = true, trade = false } })
     ns.ResetDefaults()
     T.eq(db.enabled, true)
     T.eq(db.namesOnly, false)
-    T.eq(db.spoiler, true)
+    T.eq(db.spoiler, false)
     T.eq(db.sources.party, false)
     T.eq(db.sources.trade, true)
 end)

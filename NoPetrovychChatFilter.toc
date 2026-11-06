@@ -1,8 +1,8 @@
 ## Interface: 16001
 ## Title: NoPetrovychChatFilter
-## Notes: Collapses or hides Cyrillic chat messages and Cyrillic-named senders. WoW: Forever only. /npcf opens the settings.
+## Notes: Hides Cyrillic chat messages and Cyrillic-named players, or collapses them behind a spoiler. WoW: Forever only. /npcf opens the settings.
 ## Author: Tosnk
-## Version: 1.1.0
+## Version: 1.1.1
 ## SavedVariables: NoPetrovychChatFilterDB
 ## IconTexture: Interface\AddOns\NoPetrovychChatFilter\icon.png
 ## Category: Chat

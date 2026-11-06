@@ -10,9 +10,9 @@ Three switches plus a channel list, in Escape > Options > AddOns > NoPetrovychCh
 - **Cyrillic names only**: act only on messages from characters whose name is Cyrillic, whatever
   script they type in. Off (default): any message containing Cyrillic letters is matched too, and
   so is everything from Cyrillic-named characters.
-- **Use spoiler instead of hiding** (default on): a matched line is kept, but its text is collapsed
-  behind a `[Petrovych detected, click to read]` link; one click reveals the original text in place.
-  Off: the line is removed whole, no channel tag, no name, no placeholder.
+- **Use spoiler instead of hiding** (off by default): the matched line is removed whole, no channel
+  tag, no name, no placeholder. Tick it to keep the line with its text collapsed behind a
+  `[Petrovych detected, click to read]` link; one click reveals the original text in place.
 - **Where**: the chat sources the filter applies to, for both spoiler and hiding.
 - **Log**: the Options page shows how many lines were filtered this session and an "Open log" button
   that lists them all (time, channel, sender, text). Session only; the newest 500 are kept.

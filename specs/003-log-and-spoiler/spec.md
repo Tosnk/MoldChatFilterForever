@@ -15,7 +15,7 @@
      link (like the client's mature-language filter) instead of removing. With "names only" on
      it collapses only Cyrillic-named senders; otherwise it collapses every Cyrillic match. It
      follows the channel selection like hiding does.
-   Spoiler is the default.
+   Spoiler was the default in 1.1.0; from 1.1.1 hiding is the default and spoiler is opt-in.
 
 ## Requirements
 
@@ -32,9 +32,9 @@
   `[Petrovych detected, click to read]`; a click swaps the original text back in place in every
   chat window still holding the line, or shows it in the item-ref popup if it scrolled out.
 - **R5 Lock**: only "Filter enabled" locks; every other row is its child in the Settings panel.
-- **R6 Defaults and upgrade**: enabled on, namesOnly off, spoiler on. 1.0.x saved variables
+- **R6 Defaults and upgrade**: enabled on, namesOnly off, spoiler off (db version 2; a version < 2 save gets spoiler reset). 1.0.x saved variables
   migrate: `hideAllCyrillic = false, blockNames = true` → `namesOnly = true`; anything else →
-  `namesOnly = false`; the old keys are removed; spoiler is filled in as on.
+  `namesOnly = false`; the old keys are removed.
 
 ## Design notes
 
