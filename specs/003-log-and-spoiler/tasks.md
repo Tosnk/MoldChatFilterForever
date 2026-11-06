@@ -10,4 +10,4 @@
 - [x] T008 TOC 1.1.0, CHANGELOG, README, `scripts/install-dev.ps1`
 - [ ] T009 In-game check: spoiler line renders, click reveals in place, master switch greys rows live, log window opens from Options
 - [x] T010 CurseForge description and summary shortened to one line plus `/npcf`
-- [ ] T011 Tag v1.1.0 after approval
+- [x] T011 Tagged v1.1.0, v1.1.1 (EllesmereUI reveal), v1.1.2 (buffer rewrite); 1.1.0 and older archived on CurseForge, 1.1.1 demoted to Alpha
