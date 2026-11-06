@@ -2,7 +2,7 @@
 ## Title: NoPetrovychChatFilter
 ## Notes: Hides Cyrillic chat messages and Cyrillic-named senders in the channels you choose. WoW: Forever only.
 ## Author: Tosnk
-## Version: 1.0.1
+## Version: 1.0.2
 ## SavedVariables: NoPetrovychChatFilterDB
 ## IconTexture: Interface\AddOns\NoPetrovychChatFilter\icon.png
 ## Category: Chat

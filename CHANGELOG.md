@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- New icon
+
 ## 1.0.1
 
 - Renamed to NoPetrovychChatFilter (saved settings start fresh; slash commands are now `/npcf` and `/nopetrovych`)
