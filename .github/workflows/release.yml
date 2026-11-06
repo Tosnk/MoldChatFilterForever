@@ -25,8 +25,8 @@ jobs:
       - name: TOC and CHANGELOG match the tag
         run: |
           v="${{ steps.ver.outputs.version }}"
-          grep -qx "## Version: $v" MoldChatFilterForever.toc || { echo "TOC version is not $v"; exit 1; }
-          grep -qx "## $v" CHANGELOG.md || { echo "CHANGELOG.md has no '## $v' section"; exit 1; }
+          tr -d "" < MoldChatFilterForever.toc | grep -qx "## Version: $v" || { echo "TOC version is not $v"; exit 1; }
+          tr -d "" < CHANGELOG.md | grep -qx "## $v" || { echo "CHANGELOG.md has no '## $v' section"; exit 1; }
       - name: Core tests
         run: uv run tests/run_tests.py
       - name: Package
