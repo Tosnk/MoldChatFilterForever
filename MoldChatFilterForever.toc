@@ -1,0 +1,18 @@
+## Interface: 16001
+## Title: MoldChatFilterForever
+## Notes: Hides Cyrillic chat messages and Cyrillic-named senders in the channels you choose. WoW: Forever only.
+## Author: Tosnk
+## Version: 1.0.0
+## SavedVariables: MoldChatFilterForeverDB
+## IconTexture: Interface\AddOns\MoldChatFilterForever\icon.png
+## Category: Chat
+## X-License: MIT
+## X-Website: https://www.curseforge.com/wow/addons/moldchatfilterforever
+## X-Curse-Project-ID: 1786481
+
+Core\Detect.lua
+Core\Sources.lua
+Core\Config.lua
+Core\Filter.lua
+UI\Options.lua
+UI\Slash.lua

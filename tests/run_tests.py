@@ -2,10 +2,10 @@
 # requires-python = ">=3.10"
 # dependencies = ["lupa>=2.0"]
 # ///
-"""Out-of-game test harness for MoldFilterForver's Core/ logic.
+"""Out-of-game test harness for MoldChatFilterForever's Core/ logic.
 
 Loads the addon's Core files into a Lua runtime exactly as the game would (each file is
-compiled and called with ("MoldFilterForver", ns)), then runs every tests/test_*.lua, which
+compiled and called with ("MoldChatFilterForever", ns)), then runs every tests/test_*.lua, which
 register cases with T.case(name, fn). Exit code is non-zero on any failure.
 
 Run with:  uv run tests/run_tests.py
@@ -22,12 +22,12 @@ except ImportError:  # pragma: no cover
         from lupa import LuaRuntime
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-ADDON = "MoldFilterForver"
+ADDON = "MoldChatFilterForever"
 CORE_FILES = [
-    ROOT / ADDON / "Core" / "Detect.lua",
-    ROOT / ADDON / "Core" / "Sources.lua",
-    ROOT / ADDON / "Core" / "Config.lua",
-    ROOT / ADDON / "Core" / "Filter.lua",
+    ROOT / "Core" / "Detect.lua",
+    ROOT / "Core" / "Sources.lua",
+    ROOT / "Core" / "Config.lua",
+    ROOT / "Core" / "Filter.lua",
 ]
 
 PRELUDE = b"""

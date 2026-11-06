@@ -5,7 +5,7 @@
 The game loads the checked-in folder directly through a directory junction:
 
 ```powershell
-New-Item -ItemType Junction -Path "D:\Games\World of Warcraft\_forever_\Interface\AddOns\MoldFilterForver" -Target "C:\Repos\MoldFilterForver\MoldFilterForver"
+New-Item -ItemType Junction -Path "D:\Games\World of Warcraft\_forever_\Interface\AddOns\MoldChatFilterForever" -Target "C:\Repos\MoldChatFilterForever"
 ```
 
 Remove with `Remove-Item` on the junction path (the repo folder is untouched).
@@ -20,10 +20,13 @@ Expected: every case prints `ok`, last line `N passed, 0 failed`, exit code 0.
 
 ## Verify in the game (manual checklist, run before tagging a version)
 
-1. Launch WoW: Forever, log in. AddOns list shows **MoldFilterForver** with no "out of date" tag.
-2. `/mff` opens Options, AddOns, MoldFilterForver. Checked: General, Trade, LookingForGroup,
-   LocalDefense, Other channels, Filter enabled, Block Cyrillic-named players. Unchecked: Say,
-   Yell, Emote, Party, Raid, Instance / Battleground, Guild / Officer, Whisper.
+1. Launch WoW: Forever, log in. AddOns list shows **MoldChatFilterForever** with no "out of date" tag.
+2. `/mcff` opens Options, AddOns, MoldChatFilterForever. Checked: Filter enabled, Filter all
+   Cyrillic messages, Filter Cyrillic-named players (indented and greyed out while mode 1 is on),
+   General, Trade, LookingForGroup, LocalDefense, Other channels. Unchecked: Say, Yell, Emote,
+   Party, Raid, Instance / Battleground, Guild / Officer, Whisper.
+   Untick "Filter all Cyrillic messages": the names checkbox becomes editable and stays ticked.
+   Untick it too, then re-tick mode 1: the names checkbox turns back on and locks.
 3. `/mff test привет` prints `hidden`; `/mff test hello` prints `shown`; `/mff test Ärger` prints
    `shown`.
 4. Stand in a city. Wait for a Cyrillic line in Trade or General: it never appears. Latin lines
@@ -35,4 +38,4 @@ Expected: every case prints `ok`, last line `N passed, 0 failed`, exit code 0.
 8. `/mff status` shows `hidden this session: N` with N > 0.
 9. `/reload`; reopen Options: ticks are as left. Log out and in: same.
 10. Click **Reset to defaults**: ticks return to step 2 state.
-11. BugSack shows no errors from MoldFilterForver for the session.
+11. BugSack shows no errors from MoldChatFilterForever for the session.

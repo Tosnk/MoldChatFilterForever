@@ -88,8 +88,8 @@ used.
 
 **Decision**: `tests/run_tests.py` is a `uv` script with inline metadata (`dependencies = ["lupa"]`).
 It creates a Lua runtime (LuaJIT 2.1 when the wheel provides it, else Lua 5.4 with 5.1-compatible
-test code), loads each `MoldFilterForver/Core/Detect.lua` and `Core/Sources.lua` by compiling the
-file and calling it with `("MoldFilterForver", ns)` so the files' `local ADDON, ns = ...` line
+test code), loads each `Core/Detect.lua` and `Core/Sources.lua` by compiling the
+file and calling it with `("MoldChatFilterForever", ns)` so the files' `local ADDON, ns = ...` line
 works, then runs `tests/test_*.lua`, which register cases into a table the harness iterates.
 
 **Rationale**: Constitution VI requires pure logic to be tested outside the game; no Lua

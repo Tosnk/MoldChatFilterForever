@@ -1,0 +1,12 @@
+package-as: MoldChatFilterForever
+ignore:
+  - .claude
+  - .github
+  - .specify
+  - scripts
+  - specs
+  - tests
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown
+license-output: LICENSE

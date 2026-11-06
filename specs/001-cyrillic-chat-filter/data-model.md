@@ -2,13 +2,14 @@
 
 **Date**: 2026-11-06 | **Plan**: [plan.md](plan.md)
 
-## Settings (`MoldFilterForverDB`, SavedVariables, account-wide)
+## Settings (`MoldChatFilterForeverDB`, SavedVariables, account-wide)
 
 ```lua
-MoldFilterForverDB = {
+MoldChatFilterForeverDB = {
     version    = 1,        -- schema version for future migrations
     enabled    = true,     -- master switch (FR-006)
-    blockNames = true,     -- hide everything from Cyrillic-named senders (FR-003)
+    hideAllCyrillic = true, -- mode 1: hide any message containing Cyrillic; forces blockNames (FR-003)
+    blockNames = true,     -- mode 2: hide everything from Cyrillic-named senders (FR-003)
     sources    = {         -- one boolean per Chat Source key (FR-005, FR-006)
         general      = true,
         trade        = true,

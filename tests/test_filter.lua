@@ -61,10 +61,44 @@ T.case("ShouldHide: Cyrillic-named sender with Latin text hidden when blockNames
     T.ok(ns.ShouldHide(CH, "LFM SM", "Иван-Firemaw", "Player-1-AAA", 26, "LookingForGroup"))
 end)
 
-T.case("ShouldHide: Cyrillic-named sender shown when blockNames off", function()
+T.case("ShouldHide: Cyrillic-named sender shown when both modes off", function()
     local db = freshDB()
+    db.hideAllCyrillic = false
     db.blockNames = false
     T.no(ns.ShouldHide(CH, "LFM SM", "Иван-Firemaw", "Player-1-AAA", 26, "LookingForGroup"))
+end)
+
+T.case("Mode 1 on forces mode 2: names blocked even if blockNames flag is false", function()
+    local db = freshDB()
+    db.hideAllCyrillic = true
+    db.blockNames = false
+    T.ok(ns.BlockNamesActive(), "names active while mode 1 on")
+    T.ok(ns.ShouldHide(CH, "LFM SM", "Иван-Firemaw", "Player-1-AAA", 26, "LookingForGroup"))
+end)
+
+T.case("Mode 2 only: Cyrillic text from Latin-named players is shown", function()
+    local db = freshDB()
+    db.hideAllCyrillic = false
+    db.blockNames = true
+    T.no(ns.ShouldHide(CH, "Продам шмот", "Bob-Firemaw", "Player-1-AAA", 2, "Trade"), "latin name, cyrillic text")
+    T.ok(ns.ShouldHide(CH, "Продам шмот", "Иван-Firemaw", "Player-1-BBB", 2, "Trade"), "cyrillic name, cyrillic text")
+    T.ok(ns.ShouldHide(CH, "WTS gold", "Иван-Firemaw", "Player-1-BBB", 2, "Trade"), "cyrillic name, latin text")
+end)
+
+T.case("Both modes off: nothing hidden even though filter is enabled", function()
+    local db = freshDB()
+    db.hideAllCyrillic = false
+    db.blockNames = false
+    T.no(ns.BlockNamesActive())
+    T.no(ns.ShouldHide(CH, "Продам шмот", "Иван-Firemaw", "Player-1-BBB", 2, "Trade"))
+end)
+
+T.case("Mode 2 only respects channel selection", function()
+    local db = freshDB()
+    db.hideAllCyrillic = false
+    T.no(ns.ShouldHide("CHAT_MSG_PARTY", "го", "Иван-Firemaw", "Player-1-BBB"), "party off by default")
+    db.sources.party = true
+    T.ok(ns.ShouldHide("CHAT_MSG_PARTY", "го", "Иван-Firemaw", "Player-1-BBB"), "party ticked")
 end)
 
 T.case("ShouldHide: Cyrillic-named sender in an unticked source is shown", function()
