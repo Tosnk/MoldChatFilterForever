@@ -35,6 +35,7 @@ local function Usage()
     Print("  /npcf status         show settings and the filtered count")
     Print("  /npcf test <text>    what would happen to this text in Trade?")
     Print("  /npcf reset          restore defaults")
+    Print("  /npcf debug          where the newest collapsed line lives (for bug reports)")
 end
 
 local VERDICT = { hide = "|cffff0000hidden|r", spoiler = "|cffffd100collapsed|r" }
@@ -69,6 +70,8 @@ SlashCmdList.NOPETROVYCHCHATFILTER = function(input)
         Status()
     elseif cmd == "status" then
         Status()
+    elseif cmd == "debug" then
+        ns.DebugReveal()
     elseif cmd == "test" then
         local action = ns.Judge("CHAT_MSG_CHANNEL", rest, "Stranger", nil, 2, "Trade")
         Print(('"%s" -> %s'):format(rest, VERDICT[action] or "|cff00ff00shown|r"))

@@ -55,6 +55,7 @@ powershell scripts/install-dev.ps1
 | `/npcf status` | settings and how many lines were filtered this session |
 | `/npcf test <text>` | would this text be hidden, collapsed or shown in Trade? |
 | `/npcf reset` | restore defaults |
+| `/npcf debug` | where the newest collapsed line is stored (for bug reports) |
 
 ## Releasing
 

@@ -126,21 +126,93 @@ function ns.ToggleLog()
     end
 end
 
--- Click-to-read: swap the collapsed link for the original text in place, in every message
--- frame that still holds the line. That is every ScrollingMessageFrame in the UI, not only
--- ChatFrame1-10: chat addons (EllesmereUIChat, Prat...) draw their own unnamed windows copied
--- from Blizzard's buffers. If no frame holds the line any more, show it in the item-ref popup,
--- one frame later so the client's own link handling cannot hide it again.
-local function EachMessageFrame(fn)
-    local frame = EnumerateFrames()
-    while frame do
-        if not (frame.IsForbidden and frame:IsForbidden())
-            and frame.TransformMessages and frame.GetObjectType
-            and frame:GetObjectType() == "ScrollingMessageFrame" then
-            fn(frame)
-        end
-        frame = EnumerateFrames(frame)
+-------------------------------------------------------------------------------------------------
+-- Click-to-read. The collapsed line is rewritten IN PLACE in every message frame that holds it:
+-- Blizzard's ChatFrame1..N first, then every other ScrollingMessageFrame in the UI (chat addons
+-- such as EllesmereUIChat draw their own unnamed windows copied from Blizzard's buffers).
+-- Two rewrite paths per frame: the history buffer entries directly (the way EllesmereUIChat
+-- rewrites lines on this client), then TransformMessages. Only if no frame held the line any more
+-- is the text shown in the item-ref popup, one frame later so the client's own link handling
+-- cannot hide it.
+-------------------------------------------------------------------------------------------------
+
+local isSecret = _G.issecretvalue
+local function IsPlainString(s)
+    return type(s) == "string" and not (isSecret and isSecret(s))
+end
+
+--- Replace "<token>...|h" in message with text; nil when the token is not there.
+local function Splice(message, token, text)
+    local s = find(message, token, 1, true)
+    if not s then
+        return nil
     end
+    local e = find(message, "|h", s + #token, true)   -- the link's closing |h
+    if not e then
+        return nil
+    end
+    return sub(message, 1, s - 1) .. text .. sub(message, e + 2)
+end
+
+--- Visit Blizzard's chat frames first, then every other message frame once.
+local function EachMessageFrame(fn)
+    local seen = {}
+    for i = 1, (NUM_CHAT_WINDOWS or 10) do
+        local cf = _G["ChatFrame" .. i]
+        if cf then
+            seen[cf] = true
+            fn(cf, "ChatFrame" .. i)
+        end
+    end
+    if not EnumerateFrames then
+        return
+    end
+    local f = EnumerateFrames()
+    while f do
+        if not seen[f] and not (f.IsForbidden and f:IsForbidden())
+            and f.GetObjectType and f:GetObjectType() == "ScrollingMessageFrame" then
+            seen[f] = true
+            local parent = f.GetParent and f:GetParent()
+            fn(f, (f.GetName and f:GetName()) or ("unnamed under " .. tostring(parent and parent.GetName and parent:GetName() or "?")))
+        end
+        f = EnumerateFrames(f)
+    end
+end
+
+--- Rewrite the line in one frame. Returns true when something changed.
+local function RewriteFrame(f, token, text)
+    local hit = false
+    -- Path 1: the history buffer entries, plain tables { message = ..., r, g, b, ... }.
+    local hb = f.historyBuffer
+    if hb and hb.GetNumElements and hb.GetEntryAtIndex then
+        local n = hb:GetNumElements()
+        for i = 1, n do
+            local e = hb:GetEntryAtIndex(i)
+            local m = e and e.message
+            if IsPlainString(m) then
+                local new = Splice(m, token, text)
+                if new then
+                    e.message = new
+                    hit = true
+                end
+            end
+        end
+        if hit and f.MarkDisplayDirty then
+            f:MarkDisplayDirty()
+        end
+    end
+    -- Path 2: the public API, in case the buffer is not reachable on this frame.
+    if not hit and f.TransformMessages then
+        local function predicate(message)
+            return IsPlainString(message) and find(message, token, 1, true) ~= nil
+        end
+        local function transform(message, ...)
+            hit = true
+            return Splice(message, token, text) or message, ...
+        end
+        pcall(f.TransformMessages, f, predicate, transform)
+    end
+    return hit
 end
 
 local function Reveal(id)
@@ -150,20 +222,11 @@ local function Reveal(id)
         return
     end
     local token = ns.LINK_PREFIX .. id .. "|h"
-    local isSecret = _G.issecretvalue
-    local function predicate(message)
-        return type(message) == "string" and not (isSecret and isSecret(message))
-            and find(message, token, 1, true) ~= nil
-    end
     local changed = false
-    local function transform(message, ...)
-        local s = find(message, token, 1, true)
-        local e = find(message, "|h", s + #token, true)   -- the link's closing |h
-        changed = true
-        return sub(message, 1, s - 1) .. entry.text .. sub(message, e + 2), ...
-    end
-    EachMessageFrame(function(frame)
-        pcall(frame.TransformMessages, frame, predicate, transform)
+    EachMessageFrame(function(f)
+        if RewriteFrame(f, token, entry.text) then
+            changed = true
+        end
     end)
     entry.revealed = true
     if changed then
@@ -184,6 +247,58 @@ local function Reveal(id)
     else
         popup()
     end
+end
+ns.Reveal = Reveal
+
+--- /npcf debug: where is the newest collapsed line, and can it be rewritten there?
+function ns.DebugReveal()
+    local Print = function(t) DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99NPCF debug|r: " .. t) end
+    local entry
+    for i = #ns.log, 1, -1 do
+        if ns.log[i].action == "spoiler" then
+            entry = ns.log[i]
+            break
+        end
+    end
+    Print(("EnumerateFrames %s, issecretvalue %s, NUM_CHAT_WINDOWS %s"):format(
+        tostring(EnumerateFrames ~= nil), tostring(isSecret ~= nil), tostring(NUM_CHAT_WINDOWS)))
+    if not entry then
+        Print("no collapsed line in the log yet")
+        return
+    end
+    local token = ns.LINK_PREFIX .. entry.id .. "|h"
+    Print(("newest collapsed line id %d, revealed=%s, token %s"):format(entry.id, tostring(entry.revealed == true), token:gsub("|", "||")))
+    EachMessageFrame(function(f, name)
+        local n = f.GetNumMessages and f:GetNumMessages() or -1
+        local hb = f.historyBuffer
+        local inBuffer, inInfo, secret = 0, 0, 0
+        if hb and hb.GetNumElements and hb.GetEntryAtIndex then
+            for i = 1, hb:GetNumElements() do
+                local e = hb:GetEntryAtIndex(i)
+                local m = e and e.message
+                if type(m) == "string" then
+                    if isSecret and isSecret(m) then
+                        secret = secret + 1
+                    elseif find(m, token, 1, true) then
+                        inBuffer = inBuffer + 1
+                    end
+                end
+            end
+        end
+        if f.GetMessageInfo and n > 0 then
+            for i = 1, n do
+                local m = f:GetMessageInfo(i)
+                if IsPlainString(m) and find(m, token, 1, true) then
+                    inInfo = inInfo + 1
+                end
+            end
+        end
+        if n > 0 or inBuffer > 0 then
+            Print(("%s: %d lines, buffer=%s, token in buffer %d, via GetMessageInfo %d, secret %d, Transform=%s, Dirty=%s"):format(
+                name, n, tostring(hb ~= nil), inBuffer, inInfo, secret,
+                tostring(f.TransformMessages ~= nil), tostring(f.MarkDisplayDirty ~= nil)))
+        end
+    end)
 end
 
 -- The click can arrive through several paths depending on the client build and chat addons;

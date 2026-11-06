@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.2
+
+- Click-to-read rewrites the collapsed line in place more reliably: the chat history buffer is edited directly (Blizzard chat frames first, then addon chat windows), with the public TransformMessages API as a second pass. The popup is only a last resort.
+- `/npcf debug` prints where the newest collapsed line is stored, for bug reports.
+
 ## 1.1.1
 
 - Spoiler mode is now off by default: a fresh install hides matched lines; tick "Use spoiler instead of hiding" to collapse them instead. Upgrading from 1.1.0 goes back to hiding too.
