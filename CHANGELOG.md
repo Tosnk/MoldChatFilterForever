@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.3
+
+- Click-to-read also finds chat windows drawn by chat addons (EllesmereUIChat): message frames are recognised by their message API rather than by frame type, which Lua-created windows do not report on this client. The default chat behaviour is unchanged.
+
 ## 1.1.2
 
 - Click-to-read rewrites the collapsed line in place more reliably: the chat history buffer is edited directly (Blizzard chat frames first, then addon chat windows), with the public TransformMessages API as a second pass. The popup is only a last resort.

@@ -154,29 +154,78 @@ local function Splice(message, token, text)
     return sub(message, 1, s - 1) .. text .. sub(message, e + 2)
 end
 
---- Visit Blizzard's chat frames first, then every other message frame once.
+--- Visit Blizzard's chat frames first, then every other message frame once. Two discovery
+--- paths, because chat addons (EllesmereUIChat) draw unnamed, mouse-transparent windows:
+--- EnumerateFrames when the client offers it, and a walk down the frame tree from UIParent.
+-- Recognise a message frame by what it can do, not by GetObjectType(): on this client a
+-- ScrollingMessageFrame created from Lua does not report that type (field-measured with
+-- /npcf debug: EnumerateFrames walked the UI and matched nothing by type).
+local function IsMessageFrame(f)
+    if not f or (f.IsForbidden and f:IsForbidden()) then
+        return false
+    end
+    if f.GetObjectType and f:GetObjectType() == "ScrollingMessageFrame" then
+        return true
+    end
+    return type(f.GetMessageInfo) == "function" and type(f.GetNumMessages) == "function"
+        and (f.historyBuffer ~= nil or type(f.TransformMessages) == "function")
+end
+
+local function FrameLabel(f)
+    local name = f.GetName and f:GetName()
+    if name then
+        return name
+    end
+    local parent = f.GetParent and f:GetParent()
+    local pname = parent and parent.GetName and parent:GetName()
+    return "unnamed under " .. tostring(pname or (parent and "unnamed frame") or "nothing")
+end
+
+local MAX_WALK = 20000
+
 local function EachMessageFrame(fn)
     local seen = {}
+    local found = { chat = 0, enumerate = 0, tree = 0 }
     for i = 1, (NUM_CHAT_WINDOWS or 10) do
         local cf = _G["ChatFrame" .. i]
         if cf then
             seen[cf] = true
+            found.chat = found.chat + 1
             fn(cf, "ChatFrame" .. i)
         end
     end
-    if not EnumerateFrames then
-        return
-    end
-    local f = EnumerateFrames()
-    while f do
-        if not seen[f] and not (f.IsForbidden and f:IsForbidden())
-            and f.GetObjectType and f:GetObjectType() == "ScrollingMessageFrame" then
-            seen[f] = true
-            local parent = f.GetParent and f:GetParent()
-            fn(f, (f.GetName and f:GetName()) or ("unnamed under " .. tostring(parent and parent.GetName and parent:GetName() or "?")))
+    if EnumerateFrames then
+        local f = EnumerateFrames()
+        while f do
+            if not seen[f] and IsMessageFrame(f) then
+                seen[f] = true
+                found.enumerate = found.enumerate + 1
+                fn(f, FrameLabel(f))
+            end
+            f = EnumerateFrames(f)
         end
-        f = EnumerateFrames(f)
     end
+    -- Tree walk: children of UIParent, depth first, bounded.
+    local visited = 0
+    local function walk(f)
+        if visited > MAX_WALK or not f or (f.IsForbidden and f:IsForbidden()) then
+            return
+        end
+        visited = visited + 1
+        if not seen[f] and IsMessageFrame(f) then
+            seen[f] = true
+            found.tree = found.tree + 1
+            fn(f, FrameLabel(f))
+        end
+        if f.GetChildren then
+            local children = { f:GetChildren() }
+            for _, child in ipairs(children) do
+                walk(child)
+            end
+        end
+    end
+    walk(UIParent)
+    return found
 end
 
 --- Rewrite the line in one frame. Returns true when something changed.
@@ -263,12 +312,14 @@ function ns.DebugReveal()
     Print(("EnumerateFrames %s, issecretvalue %s, NUM_CHAT_WINDOWS %s"):format(
         tostring(EnumerateFrames ~= nil), tostring(isSecret ~= nil), tostring(NUM_CHAT_WINDOWS)))
     if not entry then
-        Print("no collapsed line in the log yet")
+        local found = EachMessageFrame(function() end)
+        Print(("message frames: %d chat, %d via EnumerateFrames, %d via tree walk; no collapsed line in the log yet"):format(
+            found.chat, found.enumerate, found.tree))
         return
     end
     local token = ns.LINK_PREFIX .. entry.id .. "|h"
-    Print(("newest collapsed line id %d, revealed=%s, token %s"):format(entry.id, tostring(entry.revealed == true), token:gsub("|", "||")))
-    EachMessageFrame(function(f, name)
+    Print(("newest collapsed line id %d, revealed=%s, token %s"):format(entry.id, tostring(entry.revealed == true), (token:gsub("|", "||"))))
+    local found = EachMessageFrame(function(f, name)
         local n = f.GetNumMessages and f:GetNumMessages() or -1
         local hb = f.historyBuffer
         local inBuffer, inInfo, secret = 0, 0, 0
@@ -299,6 +350,8 @@ function ns.DebugReveal()
                 tostring(f.TransformMessages ~= nil), tostring(f.MarkDisplayDirty ~= nil)))
         end
     end)
+    Print(("message frames: %d chat, %d via EnumerateFrames, %d via tree walk"):format(
+        found.chat, found.enumerate, found.tree))
 end
 
 -- The click can arrive through several paths depending on the client build and chat addons;
