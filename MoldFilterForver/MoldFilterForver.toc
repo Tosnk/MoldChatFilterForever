@@ -1,0 +1,16 @@
+## Interface: 16001
+## Title: MoldFilterForver
+## Notes: Hides Cyrillic chat messages and Cyrillic-named senders in the channels you choose. WoW: Forever only.
+## Author: Tosnk
+## Version: 1.0.0
+## SavedVariables: MoldFilterForverDB
+## Category: Chat
+## X-License: MIT
+## X-Website: https://github.com/Tosnk/MoldFilterForver
+
+Core\Detect.lua
+Core\Sources.lua
+Core\Config.lua
+Core\Filter.lua
+UI\Options.lua
+UI\Slash.lua
