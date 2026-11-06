@@ -1,5 +1,6 @@
 package-as: NoPetrovychChatFilter
 ignore:
+  - assets
   - .claude
   - .github
   - .specify
